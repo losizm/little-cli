@@ -25,9 +25,11 @@ object Cli {
   /** Creates new options. */
   def options(): Options = new Options()
 
-  /** Creates new options from supplied options. */
-  def options(opts: Option*): Options =
-    opts.foldLeft(new Options()) { _ addOption _ }
+  /** Creates new options with supplied options. */
+  def options(opts: Optionable*): Options =
+    opts.foldLeft(new Options()) { (opts, opt) =>
+      opt.fold(left => opts addOptionGroup left, right => opts addOption right)
+    }
 
   /**
    * Creates new option with supplied short option and description.
@@ -61,6 +63,10 @@ object Cli {
 
   /** Creates new option group. */
   def group(): OptionGroup = new OptionGroup()
+
+  /** Creates new options group with supplied options. */
+  def group(opts: Option*): OptionGroup =
+    opts.foldLeft(new OptionGroup()) { _ addOption _ }
 
   /** Creates new option builder. */
   def builder(): Option.Builder = Option.builder()

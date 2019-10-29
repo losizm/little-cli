@@ -19,6 +19,12 @@ import org.apache.commons.cli._
 
 /** Provides extension methods to Apache Commons CLI. */
 object Implicits {
+  /** Converts `OptionGroup` to `Optionable`. */
+  implicit val optionGroupToOptionable: OptionGroup => Optionable = Left.apply
+
+  /** Converts `Option` to `Optionable`. */
+  implicit val optionToOptionable: Option => Optionable = Right.apply
+
   /** Adds extends methods to `org.apache.commons.cli.Option`. */
   implicit class OptionType(private val option: Option) extends AnyVal {
     /**
