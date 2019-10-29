@@ -107,4 +107,21 @@ object Implicits {
       option
     }
   }
+
+  /** Adds extends methods to `org.apache.commons.cli.Options`. */
+  implicit class OptionsType(private val options: Options) extends AnyVal {
+    /**
+     * Adds option to options and returns modified options.
+     *
+     * @param opt option to add
+     */
+    def +=(opt: Option): Options = options.addOption(opt)
+
+    /**
+     * Adds option group to options and returns modified options.
+     *
+     * @param group option group to add
+     */
+    def +=(group: OptionGroup): Options = options.addOptionGroup(group)
+  }
 }
