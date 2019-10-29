@@ -11,11 +11,52 @@ To use **little-cli**, start by adding it to your project:
 libraryDependencies += "com.github.losizm" %% "little-cli" % "0.1.0"
 ```
 
-There's also a runtime dependency to [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/index.html),
-so you must add it to your project as well.
+There's a runtime dependency to [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/index.html),
+so you'll need to add that too.
 
 ```scala
 libraryDependencies += "commons-cli" % "commons-cli" % "1.4"
+```
+
+## How It Works
+
+Here's an example of **little-cli** in action.
+
+```scala
+import little.cli.Cli
+import little.cli.Implicits._
+
+// Import some utilities for code aesthetics
+import Cli.{ option, options, parse, printHelp }
+
+// Build options
+val opts = options(
+  option("h", "help", false, "Prints help information"),
+  option("i", "ignore-case", false, "Perform case insensitive matching"),
+  option("l", "files-with-matches", false, "Print file name only"),
+  option("m", "max-count", true, "Stop reading file after 'num' matches").argName("num"),
+  option("n", "line-number", false, "Include line number of match"),
+  option("r", "recursive", false, "Recursively search subdirectories"),
+  option("x", "exclude", true, "Exclude filename pattern from search").argName("pattern"),
+)
+
+// Create something to play with
+val args = Array("-ilr", "--exclude", "*.swp", "exception", "src")
+
+// Parse command line arguments
+val cmdLine = parse(opts, args)
+
+cmdLine.hasOption("help") match {
+  // Print help with supplied usage
+  case true => printHelp("grep [ options ... ] <pattern> [ <fileName> ... ]", opts)
+
+  // Interpret and execute command
+  case false =>
+    val pattern = cmdLine.getArgList.get(0)
+    val fileName = cmdLine.getArgList.get(1)
+
+    println(s"Searching for files with '$pattern' in $fileName directory ...")
+}
 ```
 
 ## API Documentation
