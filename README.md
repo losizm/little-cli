@@ -55,7 +55,7 @@ command.hasOption("help") match {
     val pattern  = command.getArgList.get(0)
     val fileName = command.getArgList.get(1)
 
-    println(s"Searching for files with '\$pattern' in \$fileName directory...")
+    println(s"Searching for files with '$pattern' in $fileName directory...")
 }
 ```
 
