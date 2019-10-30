@@ -19,13 +19,12 @@ import java.io.{ PrintWriter, OutputStream }
 
 import org.apache.commons.cli._
 
-
 /** Bundles up components for providing command line interface. */
 sealed trait Application {
-  /** Gets command syntax of usage. */
+  /** Gets usage syntax. */
   def usage(): String
 
-  /** Sets command syntax of usage. */
+  /** Sets usage syntax. */
   def usage(syntax: String): this.type
 
   /** Gets command options. */
@@ -37,29 +36,29 @@ sealed trait Application {
   /** Sets command options. */
   def options(opts: Optionable*): this.type
 
-  /** Gets header text displayed at beginning of help information. */
+  /** Gets header displayed at beginning of help. */
   def header(): String
 
-  /** Sets header text displayed at beginning of help information. */
+  /** Sets header displayed at beginning of help. */
   def header(text: String): this.type
 
-  /** Sets footer text displayed at end of help information. */
+  /** Gets footer displayed at end of help. */
   def footer(): String
 
-  /** Sets footer text displayed at end of help information. */
+  /** Sets footer displayed at end of help. */
   def footer(text: String): this.type
 
-  /** Gets formatter used for printing help information. */
+  /** Gets formatter used for printing help. */
   def formatter(): HelpFormatter
 
-  /** Sets formatter used for printing help information. */
+  /** Sets formatter used for printing help. */
   def formatter(fmt: HelpFormatter): this.type
 
-  /** Gets maximum width of lines in help information. */
+  /** Gets maximum number of characters printed per line in help. */
   def width(): Int
 
-  /** Sets maximum width lines in help information. */
-  def width(num: Int): this.type
+  /** Sets maximum number of characters printed per line in help. */
+  def width(max: Int): this.type
 
   /** Prints help to `Sytem.out`. */
   def printHelp(): Unit
@@ -71,14 +70,14 @@ sealed trait Application {
   def printHelp(out: PrintWriter): Unit
 
   /**
-   * Parses supplied arguments to generate command.
+   * Parses supplied arguments to command line.
    *
    * @param arg arguments
    */
   def parse(args: Array[String]): CommandLine
 
   /**
-   * Parses supplied arguments to generate command.
+   * Parses supplied arguments to comman line.
    *
    * @param args arguments
    * @param stoppable specifies whether to stop at first unrecognized argument
