@@ -21,6 +21,14 @@ import org.apache.commons.cli._
 
 /** Provides factory methods and other utilities. */
 object Cli {
+  /** Creates Application with supplied usage. */
+  def app(usage: String): Application =
+    new ApplicationImpl().usage(usage)
+
+  /** Creates Application with supplied usage and options. */
+  def app(usage: String, options: Options): Application =
+    new ApplicationImpl().usage(usage).options(options)
+
   /** Creates new parser. */
   def parser(): CommandLineParser = new DefaultParser()
 
@@ -123,12 +131,8 @@ object Cli {
    * @param usage command usage
    * @param options command options
    */
-  def printHelp(out: PrintWriter, usage: String, options: Options): Unit = {
-    val formatter = new HelpFormatter()
-    formatter.printUsage(out, formatter.getWidth, usage)
-    formatter.printOptions(out, formatter.getWidth, options, formatter.getLeftPadding, formatter.getDescPadding)
-    out.flush()
-  }
+  def printHelp(out: PrintWriter, usage: String, options: Options): Unit =
+    app(usage, options).printHelp(out)
 
   /**
    * Prints help to `Sytem.out` for `options` with specified command `usage`.
@@ -150,14 +154,11 @@ object Cli {
    * @param options command options
    * @param footer text to display after options section
    */
-  def printHelp(out: PrintWriter, usage: String, header: String, options: Options, footer: String): Unit = {
-    val formatter = new HelpFormatter()
-    formatter.printUsage(out, formatter.getWidth, usage)
-    formatter.printWrapped(out, formatter.getWidth, header)
-    formatter.printOptions(out, formatter.getWidth, options, formatter.getLeftPadding, formatter.getDescPadding)
-    formatter.printWrapped(out, formatter.getWidth, footer)
-    out.flush()
-  }
+  def printHelp(out: PrintWriter, usage: String, header: String, options: Options, footer: String): Unit =
+    app(usage, options)
+      .header(header)
+      .footer(footer)
+      .printHelp(out)
 
   /**
    * Prints help to `Sytem.out` for `options` with specified command `usage`.
@@ -177,12 +178,8 @@ object Cli {
    * @param usage command usage
    * @param options command options
    */
-  def printHelp(out: PrintWriter, width: Int, usage: String, options: Options): Unit = {
-    val formatter = new HelpFormatter()
-    formatter.printUsage(out, width, usage)
-    formatter.printOptions(out, width, options, formatter.getLeftPadding, formatter.getDescPadding)
-    out.flush()
-  }
+  def printHelp(out: PrintWriter, width: Int, usage: String, options: Options): Unit =
+    app(usage, options).width(width).printHelp(out)
 
   /**
    * Prints help to `Sytem.out` for `options` with specified command `usage`.
@@ -206,12 +203,10 @@ object Cli {
    * @param options command options
    * @param footer text to display after options section
    */
-  def printHelp(out: PrintWriter, width: Int, usage: String, header: String, options: Options, footer: String): Unit = {
-    val formatter = new HelpFormatter()
-    formatter.printUsage(out, width, usage)
-    formatter.printWrapped(out, width, header)
-    formatter.printOptions(out, width, options, formatter.getLeftPadding, formatter.getDescPadding)
-    formatter.printWrapped(out, width, footer)
-    out.flush()
-  }
+  def printHelp(out: PrintWriter, width: Int, usage: String, header: String, options: Options, footer: String): Unit =
+    app(usage, options)
+      .header(header)
+      .footer(footer)
+      .width(width)
+      .printHelp(out)
 }
