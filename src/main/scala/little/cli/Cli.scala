@@ -15,8 +15,6 @@
  */
 package little.cli
 
-import java.io.PrintWriter
-
 import org.apache.commons.cli._
 
 /** Provides factory methods and other utilities. */
@@ -125,16 +123,6 @@ object Cli {
     new HelpFormatter().printHelp(usage, options)
 
   /**
-   * Prints help to `out` for `options` with specified command `usage`.
-   *
-   * @param out output destination
-   * @param usage command usage
-   * @param options command options
-   */
-  def printHelp(out: PrintWriter, usage: String, options: Options): Unit =
-    app(usage, options).printHelp(out)
-
-  /**
    * Prints help to `Sytem.out` for `options` with specified command `usage`.
    *
    * @param usage command usage
@@ -144,21 +132,6 @@ object Cli {
    */
   def printHelp(usage: String, header: String, options: Options, footer: String): Unit =
     new HelpFormatter().printHelp(usage, header, options, footer)
-
-  /**
-   * Prints help to `out` for `options` with specified command `usage`.
-   *
-   * @param out output destination
-   * @param usage command usage
-   * @param header text to display before options section
-   * @param options command options
-   * @param footer text to display after options section
-   */
-  def printHelp(out: PrintWriter, usage: String, header: String, options: Options, footer: String): Unit =
-    app(usage, options)
-      .header(header)
-      .footer(footer)
-      .printHelp(out)
 
   /**
    * Prints help to `Sytem.out` for `options` with specified command `usage`.
@@ -171,17 +144,6 @@ object Cli {
     new HelpFormatter().printHelp(width, usage, null, options, null)
 
   /**
-   * Prints help to `out` for `options` with specified command `usage`.
-   *
-   * @param out output destination
-   * @param width maximum number of characters to display per line
-   * @param usage command usage
-   * @param options command options
-   */
-  def printHelp(out: PrintWriter, width: Int, usage: String, options: Options): Unit =
-    app(usage, options).width(width).printHelp(out)
-
-  /**
    * Prints help to `Sytem.out` for `options` with specified command `usage`.
    *
    * @param width maximum number of characters to display per line
@@ -192,21 +154,4 @@ object Cli {
    */
   def printHelp(width: Int, usage: String, header: String, options: Options, footer: String): Unit =
     new HelpFormatter().printHelp(width, usage, header, options, footer)
-
-  /**
-   * Prints help to `out` for `options` with specified command `usage`.
-   *
-   * @param out output destination
-   * @param width maximum number of characters to display per line
-   * @param usage command usage
-   * @param header text to display before options section
-   * @param options command options
-   * @param footer text to display after options section
-   */
-  def printHelp(out: PrintWriter, width: Int, usage: String, header: String, options: Options, footer: String): Unit =
-    app(usage, options)
-      .header(header)
-      .footer(footer)
-      .width(width)
-      .printHelp(out)
 }
