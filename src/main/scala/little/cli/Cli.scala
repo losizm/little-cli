@@ -19,12 +19,21 @@ import org.apache.commons.cli._
 
 /** Provides factory methods and other utilities. */
 object Cli {
-  /** Creates Application with supplied usage. */
-  def app(usage: String): Application =
+  /**
+   * Creates Application with supplied usage.
+   *
+   * @param usage usage syntax
+   */
+  def application(usage: String): Application =
     new ApplicationImpl().usage(usage)
 
-  /** Creates Application with supplied usage and options. */
-  def app(usage: String, options: Options): Application =
+  /**
+   * Creates Application with supplied usage and options.
+   *
+   * @param usage usage syntax
+   * @param options command options
+   */
+  def application(usage: String, options: Options): Application =
     new ApplicationImpl().usage(usage).options(options)
 
   /** Creates new parser. */
