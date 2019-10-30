@@ -27,7 +27,11 @@ object Cli {
   /** Creates new options. */
   def options(): Options = new Options()
 
-  /** Creates new options with supplied options. */
+  /**
+   * Creates new options with supplied options.
+   *
+   * @param opts options
+   */
   def options(opts: Optionable*): Options =
     opts.foldLeft(new Options()) { (opts, opt) =>
       opt.fold(left => opts addOptionGroup left, right => opts addOption right)
@@ -97,124 +101,116 @@ object Cli {
    *
    * @param opts options
    * @param args arguments
-   * @param stoppable if `true`, parsing stops at an unrecognized argument
-   *  and the remaining arguments are added to `CommandLine`'s argument list; if
-   *  `false`, a `ParseException` is thrown after encountering an unrecognized
-   *  argument.
+   * @param stoppable specifies whether to stop at first unrecognized argument
+   *   instead of throwing `ParseException`
    */
   def parse(opts: Options, args: Array[String], stoppable: Boolean): CommandLine =
     new DefaultParser().parse(opts, args, stoppable)
 
   /**
-   * Prints help to `Sytem.out` for `options` with specified command line
-   * `syntax`.
+   * Prints help to `Sytem.out` for `options` with specified command `usage`.
    *
-   * @param syntax command line syntax
+   * @param usage command usage
    * @param options command options
    */
-  def printHelp(syntax: String, options: Options): Unit =
-    new HelpFormatter().printHelp(syntax, options)
+  def printHelp(usage: String, options: Options): Unit =
+    new HelpFormatter().printHelp(usage, options)
 
   /**
-   * Prints help to `out` for `options` with specified command line `syntax`.
+   * Prints help to `out` for `options` with specified command `usage`.
    *
    * @param out output destination
-   * @param syntax command line syntax
+   * @param usage command usage
    * @param options command options
    */
-  def printHelp(out: PrintWriter, syntax: String, options: Options): Unit = {
+  def printHelp(out: PrintWriter, usage: String, options: Options): Unit = {
     val formatter = new HelpFormatter()
-    val width = formatter.getWidth()
-    formatter.printUsage(out, width, syntax)
-    formatter.printOptions(out, width, options, formatter.getLeftPadding(), formatter.getDescPadding())
+    formatter.printUsage(out, formatter.getWidth, usage)
+    formatter.printOptions(out, formatter.getWidth, options, formatter.getLeftPadding, formatter.getDescPadding)
     out.flush()
   }
 
   /**
-   * Prints help to `Sytem.out` for `options` with specified command line
-   * `syntax`.
+   * Prints help to `Sytem.out` for `options` with specified command `usage`.
    *
-   * @param syntax command line syntax
+   * @param usage command usage
    * @param header text to display before options section
    * @param options command options
    * @param footer text to display after options section
    */
-  def printHelp(syntax: String, header: String, options: Options, footer: String): Unit =
-    new HelpFormatter().printHelp(syntax, header, options, footer)
+  def printHelp(usage: String, header: String, options: Options, footer: String): Unit =
+    new HelpFormatter().printHelp(usage, header, options, footer)
 
   /**
-   * Prints help to `out` for `options` with specified command line `syntax`.
+   * Prints help to `out` for `options` with specified command `usage`.
    *
    * @param out output destination
-   * @param syntax command line syntax
+   * @param usage command usage
    * @param header text to display before options section
    * @param options command options
    * @param footer text to display after options section
    */
-  def printHelp(out: PrintWriter, syntax: String, header: String, options: Options, footer: String): Unit = {
+  def printHelp(out: PrintWriter, usage: String, header: String, options: Options, footer: String): Unit = {
     val formatter = new HelpFormatter()
-    val width = formatter.getWidth()
-    formatter.printUsage(out, width, syntax)
+    formatter.printUsage(out, formatter.getWidth, usage)
+    formatter.printWrapped(out, formatter.getWidth, header)
+    formatter.printOptions(out, formatter.getWidth, options, formatter.getLeftPadding, formatter.getDescPadding)
+    formatter.printWrapped(out, formatter.getWidth, footer)
+    out.flush()
+  }
+
+  /**
+   * Prints help to `Sytem.out` for `options` with specified command `usage`.
+   *
+   * @param width maximum number of characters to display per line
+   * @param usage command usage
+   * @param options command options
+   */
+  def printHelp(width: Int, usage: String, options: Options): Unit =
+    new HelpFormatter().printHelp(width, usage, null, options, null)
+
+  /**
+   * Prints help to `out` for `options` with specified command `usage`.
+   *
+   * @param out output destination
+   * @param width maximum number of characters to display per line
+   * @param usage command usage
+   * @param options command options
+   */
+  def printHelp(out: PrintWriter, width: Int, usage: String, options: Options): Unit = {
+    val formatter = new HelpFormatter()
+    formatter.printUsage(out, width, usage)
+    formatter.printOptions(out, width, options, formatter.getLeftPadding, formatter.getDescPadding)
+    out.flush()
+  }
+
+  /**
+   * Prints help to `Sytem.out` for `options` with specified command `usage`.
+   *
+   * @param width maximum number of characters to display per line
+   * @param usage command usage
+   * @param header text to display before options section
+   * @param options command options
+   * @param footer text to display after options section
+   */
+  def printHelp(width: Int, usage: String, header: String, options: Options, footer: String): Unit =
+    new HelpFormatter().printHelp(width, usage, header, options, footer)
+
+  /**
+   * Prints help to `out` for `options` with specified command `usage`.
+   *
+   * @param out output destination
+   * @param width maximum number of characters to display per line
+   * @param usage command usage
+   * @param header text to display before options section
+   * @param options command options
+   * @param footer text to display after options section
+   */
+  def printHelp(out: PrintWriter, width: Int, usage: String, header: String, options: Options, footer: String): Unit = {
+    val formatter = new HelpFormatter()
+    formatter.printUsage(out, width, usage)
     formatter.printWrapped(out, width, header)
-    formatter.printOptions(out, width, options, formatter.getLeftPadding(), formatter.getDescPadding())
-    formatter.printWrapped(out, width, footer)
-    out.flush()
-  }
-
-  /**
-   * Prints help to `Sytem.out` for `options` with specified command line
-   * `syntax`.
-   *
-   * @param width maximum number of characters to display per line
-   * @param syntax command line syntax
-   * @param options command options
-   */
-  def printHelp(width: Int, syntax: String, options: Options): Unit =
-    new HelpFormatter().printHelp(width, syntax, null, options, null)
-
-  /**
-   * Prints help to `out` for `options` with specified command line `syntax`.
-   *
-   * @param out output destination
-   * @param width maximum number of characters to display per line
-   * @param syntax command line syntax
-   * @param options command options
-   */
-  def printHelp(out: PrintWriter, width: Int, syntax: String, options: Options): Unit = {
-    val formatter = new HelpFormatter()
-    formatter.printUsage(out, width, syntax)
-    formatter.printOptions(out, width, options, formatter.getLeftPadding(), formatter.getDescPadding())
-    out.flush()
-  }
-
-  /**
-   * Prints help to `Sytem.out` for `options` with specified command line
-   * `syntax`.
-   *
-   * @param width maximum number of characters to display per line
-   * @param syntax command line syntax
-   * @param header text to display before options section
-   * @param options command options
-   * @param footer text to display after options section
-   */
-  def printHelp(width: Int, syntax: String, header: String, options: Options, footer: String): Unit =
-    new HelpFormatter().printHelp(width, syntax, header, options, footer)
-
-  /**
-   * Prints help to `out` for `options` with specified command line `syntax`.
-   *
-   * @param out output destination
-   * @param width maximum number of characters to display per line
-   * @param syntax command line syntax
-   * @param header text to display before options section
-   * @param options command options
-   * @param footer text to display after options section
-   */
-  def printHelp(out: PrintWriter, width: Int, syntax: String, header: String, options: Options, footer: String): Unit = {
-    val formatter = new HelpFormatter()
-    formatter.printUsage(out, width, syntax)
-    formatter.printWrapped(out, width, header)
-    formatter.printOptions(out, width, options, formatter.getLeftPadding(), formatter.getDescPadding())
+    formatter.printOptions(out, width, options, formatter.getLeftPadding, formatter.getDescPadding)
     formatter.printWrapped(out, width, footer)
     out.flush()
   }
