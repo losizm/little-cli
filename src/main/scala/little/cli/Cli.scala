@@ -33,7 +33,7 @@ object Cli {
    * Creates Application with supplied usage and options.
    *
    * @param usage usage syntax
-   * @param options command options
+   * @param options application options
    */
   def application(usage: String, options: Options): Application =
     new ApplicationImpl().usage(usage).options(options)
@@ -127,7 +127,7 @@ object Cli {
    * @param opts options
    * @param args arguments
    * @param stoppable specifies whether to stop at first unrecognized argument
-   *   instead of throwing `ParseException`
+   *   instead of failing with `ParseException`
    */
   def tryParse(opts: Options, args: Array[String], stoppable: Boolean): Try[CommandLine] =
     Try { new DefaultParser().parse(opts, args, stoppable) }

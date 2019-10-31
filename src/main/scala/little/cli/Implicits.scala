@@ -30,80 +30,80 @@ object Implicits {
     /**
      * Sets number of arguments and returns modified option.
      *
-     * @param value number of arguments
+     * @param count number of arguments
      */
-    def args(value: Int): Option = {
-      option.setArgs(value)
+    def args(count: Int): Option = {
+      option.setArgs(count)
       option
     }
 
     /**
      * Sets argument name and returns modified option.
      *
-     * @param value argument name
+     * @param name argument name
      */
-    def argName(value: String): Option = {
-      option.setArgName(value)
+    def argName(name: String): Option = {
+      option.setArgName(name)
       option
     }
 
     /**
      * Sets description and returns modified option.
      *
-     * @param value description
+     * @param desc description
      */
-    def description(value: String): Option = {
-      option.setDescription(value)
+    def description(desc: String): Option = {
+      option.setDescription(desc)
       option
     }
 
     /**
      * Sets long name of option and returns modified option.
      *
-     * @param value long name of option
+     * @param name long name of option
      */
-    def longOpt(value: String): Option = {
-      option.setLongOpt(value)
+    def longOpt(name: String): Option = {
+      option.setLongOpt(name)
       option
     }
 
     /**
      * Sets whether option has an optional argument and returns modified option.
      *
-     * @param value specifies whether argument is optional
+     * @param optional specifies whether argument is optional
      */
-    def optionalArg(value: Boolean): Option = {
-      option.setOptionalArg(value)
+    def optionalArg(optional: Boolean): Option = {
+      option.setOptionalArg(optional)
       option
     }
 
     /**
      * Sets whether option is required and returns modified option.
      *
-     * @param value specifies whether option is required
+     * @param mandatory specifies whether option is required
      */
-    def required(value: Boolean = true): Option = {
-      option.setRequired(value)
+    def required(mandatory: Boolean = true): Option = {
+      option.setRequired(mandatory)
       option
     }
 
     /**
      * Sets option type and returns modified option.
      *
-     * @param value option type
+     * @param optType option type
      */
-    def optionType(value: Class[_]): Option = {
-      option.setType(value)
+    def optionType(optType: Class[_]): Option = {
+      option.setType(optType)
       option
     }
 
     /**
      * Sets value separator and returns modified option.
      *
-     * @param value value separator
+     * @param sep value separator
      */
-    def valueSeparator(value: Char): Option = {
-      option.setValueSeparator(value)
+    def valueSeparator(sep: Char): Option = {
+      option.setValueSeparator(sep)
       option
     }
   }

@@ -111,7 +111,7 @@ sealed trait Application {
    *
    * @param args arguments
    * @param stoppable specifies whether to stop at first unrecognized argument
-   *   instead of throwing `ParseException`
+   *   instead of failing with `ParseException`
    */
   def tryParse(args: Array[String], stoppable: Boolean): Try[CommandLine]
 }

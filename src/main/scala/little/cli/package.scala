@@ -26,14 +26,11 @@ import org.apache.commons.cli._
  * Here's an example showing the library in action.
  *
  * {{{
- * import little.cli.Cli
+ * import little.cli.Cli.{ application, option }
  * import little.cli.Implicits._
  *
- * // Import this for code aesthetics
- * import Cli.option
- *
  * // Create application with specified usage
- * val app = Cli.app("grep [ options ... ] <pattern> [ <fileName> ... ]")
+ * val app = application("grep [ options ... ] <pattern> [ <fileName> ... ]")
  *
  * // Add options to application
  * app.options(
@@ -49,14 +46,14 @@ import org.apache.commons.cli._
  * val args = Array("-ilr", "--exclude", "*.swp", "exception", "src/main/scala")
  *
  * // Parse arguments
- * val command = app.parse(args)
+ * val cmd = app.parse(args)
  *
- * command.hasOption("help") match {
+ * cmd.hasOption("help") match {
  *   case true  => app.printHelp() // Print help if requested
  *   case false =>
  *     // Interpret command and pretend to do something
- *     val pattern  = command.getArgList.get(0)
- *     val fileName = command.getArgList.get(1)
+ *     val pattern  = cmd.getArg(0)
+ *     val fileName = cmd.getArg(1)
  *
  *     println(s"Searching for files with '\$pattern' in \$fileName directory...")
  * }
