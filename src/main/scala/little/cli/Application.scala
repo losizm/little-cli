@@ -19,6 +19,8 @@ import java.io.{ PrintWriter, OutputStream }
 
 import org.apache.commons.cli._
 
+import scala.util.Try
+
 /** Bundles up components for providing command line interface. */
 sealed trait Application {
   /** Gets usage syntax. */
@@ -27,13 +29,13 @@ sealed trait Application {
   /** Sets usage syntax. */
   def usage(syntax: String): this.type
 
-  /** Gets command options. */
+  /** Gets application options. */
   def options(): Options
 
-  /** Sets command options. */
+  /** Sets application options. */
   def options(opts: Options): this.type
 
-  /** Sets command options. */
+  /** Sets application options. */
   def options(opts: Optionable*): this.type
 
   /** Gets header displayed at beginning of help. */
@@ -63,27 +65,51 @@ sealed trait Application {
   /** Prints help to `Sytem.out`. */
   def printHelp(): Unit
 
-  /** Prints help to supplied output stream. */
+  /**
+   * Prints help to supplied output stream.
+   *
+   * @param out output stream to which help is printed
+   */
   def printHelp(out: OutputStream): Unit
 
-  /** Prints help to supplied writer. */
+  /**
+   * Prints help to supplied writer.
+   *
+   * @param out writer to which help is printed
+   */
   def printHelp(out: PrintWriter): Unit
 
   /**
-   * Parses supplied arguments to command line.
+   * Parses supplied arguments according to application options.
    *
-   * @param arg arguments
+   * @param args arguments
    */
   def parse(args: Array[String]): CommandLine
 
   /**
-   * Parses supplied arguments to comman line.
+   * Parses supplied arguments according to application options.
    *
    * @param args arguments
    * @param stoppable specifies whether to stop at first unrecognized argument
    *   instead of throwing `ParseException`
    */
   def parse(args: Array[String], stoppable: Boolean): CommandLine
+
+  /**
+   * Tries to parse supplied arguments according to application options.
+   *
+   * @param args arguments
+   */
+  def tryParse(args: Array[String]): Try[CommandLine]
+
+  /**
+   * Tries to parse supplied arguments according to application options.
+   *
+   * @param args arguments
+   * @param stoppable specifies whether to stop at first unrecognized argument
+   *   instead of throwing `ParseException`
+   */
+  def tryParse(args: Array[String], stoppable: Boolean): Try[CommandLine]
 }
 
 private class ApplicationImpl extends Application {
@@ -173,4 +199,10 @@ private class ApplicationImpl extends Application {
 
   def parse(args: Array[String], stoppable: Boolean): CommandLine =
     parser.parse(options, args, stoppable)
+
+  def tryParse(args: Array[String]): Try[CommandLine] =
+    Try { new DefaultParser().parse(options, args) }
+
+  def tryParse(args: Array[String], stoppable: Boolean): Try[CommandLine] =
+    Try { new DefaultParser().parse(options, args, stoppable) }
 }

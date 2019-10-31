@@ -17,6 +17,8 @@ package little.cli
 
 import org.apache.commons.cli._
 
+import scala.util.Try
+
 /** Provides factory methods and other utilities. */
 object Cli {
   /**
@@ -125,6 +127,26 @@ object Cli {
    */
   def parse(opts: Options, args: Array[String], stoppable: Boolean): CommandLine =
     new DefaultParser().parse(opts, args, stoppable)
+
+  /**
+   * Tries to parse arguments according to specified options.
+   *
+   * @param opts options
+   * @param args arguments
+   */
+  def tryParse(opts: Options, args: Array[String]): Try[CommandLine] =
+    Try { new DefaultParser().parse(opts, args) }
+
+  /**
+   * Tries to parse arguments according to specified options.
+   *
+   * @param opts options
+   * @param args arguments
+   * @param stoppable specifies whether to stop at first unrecognized argument
+   *   instead of throwing `ParseException`
+   */
+  def tryParse(opts: Options, args: Array[String], stoppable: Boolean): Try[CommandLine] =
+    Try { new DefaultParser().parse(opts, args, stoppable) }
 
   /**
    * Prints help to `Sytem.out` for `options` with specified `usage` syntax.
