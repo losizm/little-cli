@@ -197,8 +197,8 @@ private class ApplicationImpl extends Application {
     parser.parse(options, args, stoppable)
 
   def tryParse(args: Array[String]): Try[CommandLine] =
-    Try { new DefaultParser().parse(options, args) }
+    Try { parse(args) }
 
   def tryParse(args: Array[String], stoppable: Boolean): Try[CommandLine] =
-    Try { new DefaultParser().parse(options, args, stoppable) }
+    Try { parse(args, stoppable) }
 }

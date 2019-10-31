@@ -119,7 +119,7 @@ object Cli {
    * @param args arguments
    */
   def tryParse(opts: Options, args: Array[String]): Try[CommandLine] =
-    Try { new DefaultParser().parse(opts, args) }
+    Try { parse(opts, args) }
 
   /**
    * Tries to parse arguments according to specified options.
@@ -130,7 +130,7 @@ object Cli {
    *   instead of failing with `ParseException`
    */
   def tryParse(opts: Options, args: Array[String], stoppable: Boolean): Try[CommandLine] =
-    Try { new DefaultParser().parse(opts, args, stoppable) }
+    Try { parse(opts, args, stoppable) }
 
   /**
    * Prints help to `Sytem.out` for `options` with specified `usage` syntax.
