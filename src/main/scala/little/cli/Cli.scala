@@ -38,9 +38,6 @@ object Cli {
   def application(usage: String, options: Options): Application =
     new ApplicationImpl().usage(usage).options(options)
 
-  /** Creates new parser. */
-  def parser(): CommandLineParser = new DefaultParser()
-
   /** Creates new options. */
   def options(): Options = new Options()
 
@@ -51,7 +48,7 @@ object Cli {
    */
   def options(opts: Optionable*): Options =
     opts.foldLeft(new Options()) { (opts, opt) =>
-      opt.fold(left => opts addOptionGroup left, right => opts addOption right)
+      opt.fold(opts.addOptionGroup, opts.addOption)
     }
 
   /**
