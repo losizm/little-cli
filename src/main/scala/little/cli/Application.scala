@@ -21,7 +21,11 @@ import org.apache.commons.cli._
 
 import scala.util.Try
 
-/** Bundles up components for providing command line interface. */
+/**
+ * Bundles up components for providing command line interface.
+ *
+ * @see [[Cli Cli.application(usage)]], [[Cli Cli.application(usage, options)]]
+ */
 sealed trait Application {
   /** Gets usage syntax. */
   def usage(): String
@@ -152,18 +156,12 @@ private class ApplicationImpl extends Application {
   }
 
   def header(text: String): this.type = {
-    _header = text match {
-      case null => ""
-      case _    => text
-    }
+    _header = text
     this
   }
 
   def footer(text: String): this.type = {
-    _footer = text match {
-      case null => ""
-      case _    => text
-    }
+    _footer = text
     this
   }
 
@@ -180,17 +178,15 @@ private class ApplicationImpl extends Application {
     this
   }
 
-  def printHelp(): Unit =
-    formatter.printHelp(usage, header, options, footer)
+  def printHelp(): Unit = printHelp(System.out)
 
-  def printHelp(out: OutputStream): Unit =
-    printHelp(new PrintWriter(out, true))
+  def printHelp(out: OutputStream): Unit = printHelp(new PrintWriter(out, true))
 
   def printHelp(out: PrintWriter): Unit = {
     formatter.printUsage(out, formatter.getWidth, usage)
-    formatter.printWrapped(out, formatter.getWidth, header)
+    if (header != null) formatter.printWrapped(out, formatter.getWidth, header)
     formatter.printOptions(out, formatter.getWidth, options, formatter.getLeftPadding, formatter.getDescPadding)
-    formatter.printWrapped(out, formatter.getWidth, footer)
+    if (footer != null) formatter.printWrapped(out, formatter.getWidth, footer)
     out.flush()
   }
 

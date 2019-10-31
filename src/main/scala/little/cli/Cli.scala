@@ -139,7 +139,7 @@ object Cli {
    * @param options command options
    */
   def printHelp(usage: String, options: Options): Unit =
-    new HelpFormatter().printHelp(usage, options)
+    application(usage, options).printHelp()
 
   /**
    * Prints help to `Sytem.out` for `options` with specified `usage` syntax.
@@ -150,7 +150,7 @@ object Cli {
    * @param footer text to print after options section
    */
   def printHelp(usage: String, header: String, options: Options, footer: String): Unit =
-    new HelpFormatter().printHelp(usage, header, options, footer)
+    application(usage, options).header(header).footer(footer).printHelp()
 
   /**
    * Prints help to `Sytem.out` for `options` with specified `usage` syntax.
@@ -160,7 +160,7 @@ object Cli {
    * @param options command options
    */
   def printHelp(width: Int, usage: String, options: Options): Unit =
-    new HelpFormatter().printHelp(width, usage, null, options, null)
+    application(usage, options).width(width).printHelp()
 
   /**
    * Prints help to `Sytem.out` for `options` with specified `usage` syntax.
@@ -172,5 +172,5 @@ object Cli {
    * @param footer text to print after options section
    */
   def printHelp(width: Int, usage: String, header: String, options: Options, footer: String): Unit =
-    new HelpFormatter().printHelp(width, usage, header, options, footer)
+    application(usage, options).width(width).header(header).footer(footer).printHelp()
 }
