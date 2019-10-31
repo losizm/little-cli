@@ -17,7 +17,7 @@ package little.cli
 
 import org.apache.commons.cli._
 
-/** Provides extension methods to Apache Commons CLI. */
+/** Provides extension methods to [[https://commons.apache.org/proper/commons-cli/index.html Apache Commons CLI]]. */
 object Implicits {
   /** Converts `OptionGroup` to `Optionable`. */
   implicit val optionGroupToOptionable: OptionGroup => Optionable = Left.apply
@@ -25,7 +25,7 @@ object Implicits {
   /** Converts `Option` to `Optionable`. */
   implicit val optionToOptionable: Option => Optionable = Right.apply
 
-  /** Adds extends methods to `org.apache.commons.cli.Option`. */
+  /** Adds extension methods to `org.apache.commons.cli.Option`. */
   implicit class OptionType(private val option: Option) extends AnyVal {
     /**
      * Sets number of arguments and returns modified option.
@@ -108,7 +108,27 @@ object Implicits {
     }
   }
 
-  /** Adds extends methods to `org.apache.commons.cli.Options`. */
+  /** Adds extension methods to `org.apache.commons.cli.OptionGroup`. */
+  implicit class OptionGroupType(private val group: OptionGroup) extends AnyVal {
+    /**
+     * Adds option to group and returns modified group.
+     *
+     * @param opt option to add
+     */
+    def +=(opt: Option): OptionGroup = group.addOption(opt)
+
+    /**
+     * Sets whether group is required and returns modified group.
+     *
+     * @param value specifies whether group is required
+     */
+    def required(value: Boolean = true): OptionGroup = {
+      group.setRequired(value)
+      group
+    }
+  }
+
+  /** Adds extension methods to `org.apache.commons.cli.Options`. */
   implicit class OptionsType(private val options: Options) extends AnyVal {
     /**
      * Adds option to options and returns modified options.
