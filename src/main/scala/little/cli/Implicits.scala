@@ -152,4 +152,17 @@ object Implicits {
     def addOptions(opts: Optionable*): Options =
       opts.foldLeft(options) { (os, opt) => opt.fold(os.addOptionGroup, os.addOption) }
   }
+
+  /** Adds extension methods to `org.apache.commons.cli.CommandLine`. */
+  implicit class CommandLineType(private val command: CommandLine) extends AnyVal {
+    /** Gets argument count. */
+    def getArgCount(): Int = command.getArgs.size
+
+    /**
+     * Gets argument at specified index.
+     *
+     * @param index argument index
+     */
+    def getArg(index: Int): String = command.getArgs().apply(index)
+  }
 }
