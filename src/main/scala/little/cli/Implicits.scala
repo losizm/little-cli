@@ -113,7 +113,7 @@ object Implicits {
     /**
      * Adds option to group and returns modified group.
      *
-     * @param opt option to add
+     * @param opt option
      */
     def +=(opt: Option): OptionGroup = group.addOption(opt)
 
@@ -131,17 +131,25 @@ object Implicits {
   /** Adds extension methods to `org.apache.commons.cli.Options`. */
   implicit class OptionsType(private val options: Options) extends AnyVal {
     /**
-     * Adds option to options and returns modified options.
+     * Adds option and returns modified options.
      *
-     * @param opt option to add
+     * @param opt option
      */
     def +=(opt: Option): Options = options.addOption(opt)
 
     /**
-     * Adds option group to options and returns modified options.
+     * Adds option group and returns modified options.
      *
-     * @param group option group to add
+     * @param group option group
      */
     def +=(group: OptionGroup): Options = options.addOptionGroup(group)
+
+    /**
+     * Adds more options and returns modified options.
+     *
+     * @param opts more options
+     */
+    def addOptions(opts: Optionable*): Options =
+      opts.foldLeft(options) { (os, opt) => opt.fold(os.addOptionGroup, os.addOption) }
   }
 }
