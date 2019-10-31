@@ -95,19 +95,6 @@ object Cli {
   def group(opts: Option*): OptionGroup =
     opts.foldLeft(new OptionGroup()) { _ addOption _ }
 
-  /** Creates new option builder. */
-  def builder(): Option.Builder = Option.builder()
-
-  /**
-   * Creates new option builder using supplied short option.
-   *
-   * @param opt short option
-   */
-  def builder(opt: String): Option.Builder = Option.builder(opt)
-
-  /** Creates new help formatter. */
-  def formatter(): HelpFormatter = new HelpFormatter()
-
   /**
    * Parses arguments according to specified options.
    *
