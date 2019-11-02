@@ -168,8 +168,8 @@ object Implicits {
      *
      * @param value specifies whether group is required
      */
-    def required(value: Boolean = true): OptionGroup = {
-      group.setRequired(value)
+    def required(mandatory: Boolean = true): OptionGroup = {
+      group.setRequired(mandatory)
       group
     }
   }
