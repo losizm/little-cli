@@ -56,7 +56,7 @@ cmd.hasOption("help") match {
 }
 ```
 
-## Mapping Option and Argument Values
+### Mapping Option and Argument Values
 
 Option and argument values can be mapped to types other than `String` by
 adding a `ValueMapper[T]` to implicit scope. There are default implementations
