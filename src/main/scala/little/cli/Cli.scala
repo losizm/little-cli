@@ -38,9 +38,6 @@ object Cli {
   def application(usage: String, options: Options): Application =
     new ApplicationImpl().usage(usage).options(options)
 
-  /** Creates new options. */
-  def options(): Options = new Options()
-
   /**
    * Creates new options with supplied options.
    *
@@ -80,9 +77,6 @@ object Cli {
    */
   def option(opt: String, longOpt: String, hasArg: Boolean, description: String): Option =
     new Option(opt, longOpt, hasArg, description)
-
-  /** Creates new option group. */
-  def group(): OptionGroup = new OptionGroup()
 
   /**
    * Creates new options group with supplied options.
