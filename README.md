@@ -8,7 +8,7 @@ The Scala library that provides extension methods to [Apache Commons CLI](https:
 To use **little-cli**, start by adding it to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-cli" % "0.3.1"
+libraryDependencies += "com.github.losizm" %% "little-cli" % "0.4.0"
 ```
 
 There's a runtime dependency to [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/index.html),
@@ -54,6 +54,45 @@ cmd.hasOption("help") match {
 
     println(s"Searching for files with '$pattern' in $fileName directory...")
 }
+```
+
+## Mapping Option and Argument Values
+
+Option and argument values can be mapped to types other than `String` by
+adding a `ValueMapper[T]` to implicit scope. There are default implementations
+for `Int`, `Long`, and `File` defined in `Implicits`. Feel free to define your
+own for other types.
+
+```scala
+import little.cli.Cli.{ application, option }
+import little.cli.Implicits._
+import little.cli.ValueMapper
+
+case class KeepAlive(idleTimeout: Int, maxRequests: Int)
+
+// Define how to map value to KeepAlive
+implicit val keepAliveMapper: ValueMapper[KeepAlive] =
+  _.split(":") match {
+    case Array(timeout, max) => KeepAlive(timeout.toInt, max.toInt)
+  }
+
+val app = application("start-server [ options ... ] port")
+  .options(
+    option("d", "directory", true, "Location of public files directory"),
+    option("k", "keep-alive", true, "Allow persistent connections")
+      .argName("timeout:max")
+  )
+
+val cmd = app.parse("-d ./public_html --keep-alive 5:10 8080".split("\\s+"))
+
+// Map keep-alive option
+val keepAlive = cmd.mapOptionValue[KeepAlive]("keep-alive")
+
+// Map directory option
+val directory = cmd.mapOptionValue[java.io.File]("directory")
+
+// Map port argument
+val port = cmd.mapArg[Int](0)
 ```
 
 ## API Documentation

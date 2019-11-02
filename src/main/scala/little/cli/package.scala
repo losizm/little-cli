@@ -62,4 +62,7 @@ import org.apache.commons.cli._
 package object cli {
   /** Either `OptionGroup` or `Option` can added to `Options`. */
   type Optionable = Either[OptionGroup, Option]
+
+  /** Alias to `java.lang.NullPointerException`. */
+  type NullPointerException = java.lang.NullPointerException
 }

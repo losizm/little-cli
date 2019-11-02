@@ -15,15 +15,34 @@
  */
 package little.cli
 
+import java.io.File
+
 import org.apache.commons.cli._
+
+import scala.reflect.ClassTag
 
 /** Provides extension methods to [[https://commons.apache.org/proper/commons-cli/index.html Apache Commons CLI]]. */
 object Implicits {
+  /** Converts `Option` to `Optionable`. */
+  implicit val optionToOptionable: Option => Optionable = Right.apply
+
   /** Converts `OptionGroup` to `Optionable`. */
   implicit val optionGroupToOptionable: OptionGroup => Optionable = Left.apply
 
-  /** Converts `Option` to `Optionable`. */
-  implicit val optionToOptionable: Option => Optionable = Right.apply
+  /** Maps value to `Int`. */
+  implicit object IntValueMapper extends ValueMapper[Int] {
+    def map(value: String): Int = value.toInt
+  }
+
+  /** Maps value to `Long`. */
+  implicit object LongValueMapper extends ValueMapper[Long] {
+    def map(value: String): Long = value.toLong
+  }
+
+  /** Maps value to `File`. */
+  implicit object FileValueMapper extends ValueMapper[File] {
+    def map(value: String): File = new File(value)
+  }
 
   /** Adds extension methods to `org.apache.commons.cli.Option`. */
   implicit class OptionType(private val option: Option) extends AnyVal {
@@ -106,6 +125,33 @@ object Implicits {
       option.setValueSeparator(sep)
       option
     }
+
+    /**
+     * Maps option value to type T.
+     *
+     * @param mapper value mapper
+     *
+     * @throws NullPointerException if option value is null
+     */
+    def mapValue[T](implicit mapper: ValueMapper[T]): T =
+      option.getValue match {
+        case null  => throw new NullPointerException(s"option value is null: ${option.getOpt}")
+        case value => mapper.map(value)
+      }
+
+    /**
+     * Maps option values to Array[T].
+     *
+     * @param mapper value mapper
+     * @param tag class tag
+     *
+     * @throws NullPointerException if option value is null
+     */
+    def mapValues[T](implicit mapper: ValueMapper[T], tag: ClassTag[T]): Array[T] =
+      option.getValues match {
+        case null   => throw new NullPointerException(s"option value is null: ${option.getOpt}")
+        case values => values.map(mapper.map)
+      }
   }
 
   /** Adds extension methods to `org.apache.commons.cli.OptionGroup`. */
@@ -164,5 +210,52 @@ object Implicits {
      * @param index argument index
      */
     def getArg(index: Int): String = command.getArgs().apply(index)
+
+    /**
+     * Maps argument at specified index to type T.
+     *
+     * @param index argument index
+     * @param mapper value mapper
+     */
+    def mapArg[T](index: Int)(implicit mapper: ValueMapper[T]): T =
+      mapper.map { getArg(index) }
+
+    /**
+     * Maps arguments to Array[T].
+     *
+     * @param mapper value mapper
+     * @param tag class tag
+     */
+    def mapArgs[T](implicit mapper: ValueMapper[T], tag: ClassTag[T]): Array[T] =
+      command.getArgs.map(mapper.map)
+
+    /**
+     * Maps option value to type T.
+     *
+     * @param opt option
+     * @param mapper value mapper
+     *
+     * @throws NullPointerException if option value is null
+     */
+    def mapOptionValue[T](opt: String)(implicit mapper: ValueMapper[T]): T =
+      command.getOptionValue(opt) match {
+        case null  => throw new NullPointerException(s"option value is null: $opt")
+        case value => mapper.map(value)
+      }
+
+    /**
+     * Maps option values to Array[T].
+     *
+     * @param opt option
+     * @param mapper value mapper
+     * @param tag class tag
+     *
+     * @throws NullPointerException if option value is null
+     */
+    def mapOptionValues[T](opt: String)(implicit mapper: ValueMapper[T], tag: ClassTag[T]): Array[T] =
+      command.getOptionValues(opt) match {
+        case null   => throw new NullPointerException(s"option value is null: $opt")
+        case values => values.map(mapper.map)
+      }
   }
 }
