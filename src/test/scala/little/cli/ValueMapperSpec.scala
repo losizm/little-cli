@@ -68,10 +68,10 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
 
     val cmd = app.parse(Array("-x"))
 
-    assertThrows[NullPointerException] { cmd.mapOptionValue[Int]("n") }
-    assertThrows[NullPointerException] { cmd.mapOptionValue[Long]("n") }
-    assertThrows[NullPointerException] { cmd.mapOptionValue[File]("f") }
-    assertThrows[NullPointerException] { cmd.mapOptionValue[User]("u") }
+    assertThrows[NoSuchElementException] { cmd.mapOptionValue[Int]("n") }
+    assertThrows[NoSuchElementException] { cmd.mapOptionValue[Long]("n") }
+    assertThrows[NoSuchElementException] { cmd.mapOptionValue[File]("f") }
+    assertThrows[NoSuchElementException] { cmd.mapOptionValue[User]("u") }
 
     assert { cmd.mapOptionValue("n", 10) == 10 }
     assert { cmd.mapOptionValue("n", 10L) == 10L }
@@ -83,20 +83,20 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
     assert { cmd.mapOptionValues[File]("f").isEmpty }
     assert { cmd.mapOptionValues[User]("U").isEmpty }
 
-    assertThrows[NullPointerException] { cmd.mapOptionValue[Int]("x") }
-    assertThrows[NullPointerException] { cmd.mapOptionValue[Long]("x") }
-    assertThrows[NullPointerException] { cmd.mapOptionValue[File]("x") }
-    assertThrows[NullPointerException] { cmd.mapOptionValue[User]("x") }
+    assertThrows[NoSuchElementException] { cmd.mapOptionValue[Int]("x") }
+    assertThrows[NoSuchElementException] { cmd.mapOptionValue[Long]("x") }
+    assertThrows[NoSuchElementException] { cmd.mapOptionValue[File]("x") }
+    assertThrows[NoSuchElementException] { cmd.mapOptionValue[User]("x") }
 
     assert { cmd.mapOptionValues[Int]("x").isEmpty }
     assert { cmd.mapOptionValues[Long]("x").isEmpty }
     assert { cmd.mapOptionValues[File]("x").isEmpty }
     assert { cmd.mapOptionValues[User]("x").isEmpty }
 
-    assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValue[Int]) }
-    assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValue[Long]) }
-    assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValue[File]) }
-    assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValue[User]) }
+    assertThrows[NoSuchElementException] { cmd.getOptions.foreach(_.mapValue[Int]) }
+    assertThrows[NoSuchElementException] { cmd.getOptions.foreach(_.mapValue[Long]) }
+    assertThrows[NoSuchElementException] { cmd.getOptions.foreach(_.mapValue[File]) }
+    assertThrows[NoSuchElementException] { cmd.getOptions.foreach(_.mapValue[User]) }
 
     assert { cmd.getOptions.forall(_.mapValues[Int].isEmpty) }
     assert { cmd.getOptions.forall(_.mapValues[Long].isEmpty) }

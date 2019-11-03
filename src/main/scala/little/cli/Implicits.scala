@@ -129,11 +129,11 @@ object Implicits {
      *
      * @param mapper value mapper
      *
-     * @throws NullPointerException if option value is null
+     * @throws NoSuchElementException if option value not present
      */
     def mapValue[T](implicit mapper: ValueMapper[T]): T =
       option.getValue match {
-        case null  => throw new NullPointerException(s"option value is null: ${option.getOpt}")
+        case null  => throw new NoSuchElementException(s"option value not present: ${option.getOpt}")
         case value => mapper.map(value)
       }
 
@@ -243,11 +243,11 @@ object Implicits {
      * @param opt option
      * @param mapper value mapper
      *
-     * @throws NullPointerException if option value is null
+     * @throws NoSuchElementException if option value not present
      */
     def mapOptionValue[T](opt: String)(implicit mapper: ValueMapper[T]): T =
       command.getOptionValue(opt) match {
-        case null  => throw new NullPointerException(s"option value is null: $opt")
+        case null  => throw new NoSuchElementException(s"option value not present: $opt")
         case value => mapper.map(value)
       }
 

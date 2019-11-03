@@ -60,9 +60,14 @@ import org.apache.commons.cli._
  * }}}
  */
 package object cli {
-  /** Either `OptionGroup` or `Option` can added to `Options`. */
+  /**
+   * Either `OptionGroup` or `Option` can added to `Options`.
+   *
+   * @see [[Implicits.optionToOptionable optionToOptionable]],
+   *  [[Implicits.optionGroupToOptionable optionGroupToOptionable]]
+   */
   type Optionable = Either[OptionGroup, Option]
 
-  /** Alias to `java.lang.NullPointerException`. */
-  type NullPointerException = java.lang.NullPointerException
+  /** Alias to `java.util.NoSuchElementException`. */
+  type NoSuchElementException = java.util.NoSuchElementException
 }
