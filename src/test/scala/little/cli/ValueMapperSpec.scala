@@ -74,35 +74,35 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
     assertThrows[NullPointerException] { cmd.mapOptionValue[File]("f") }
     assertThrows[NullPointerException] { cmd.mapOptionValue[User]("u") }
 
-    assertThrows[NullPointerException] { cmd.mapOptionValues[Int]("n") }
-    assertThrows[NullPointerException] { cmd.mapOptionValues[Long]("n") }
-    assertThrows[NullPointerException] { cmd.mapOptionValues[File]("f") }
-    assertThrows[NullPointerException] { cmd.mapOptionValues[User]("U") }
+    assert { cmd.mapOptionValues[Int]("n").isEmpty }
+    assert { cmd.mapOptionValues[Long]("n").isEmpty }
+    assert { cmd.mapOptionValues[File]("f").isEmpty }
+    assert { cmd.mapOptionValues[User]("U").isEmpty }
 
     assertThrows[NullPointerException] { cmd.mapOptionValue[Int]("x") }
     assertThrows[NullPointerException] { cmd.mapOptionValue[Long]("x") }
     assertThrows[NullPointerException] { cmd.mapOptionValue[File]("x") }
     assertThrows[NullPointerException] { cmd.mapOptionValue[User]("x") }
 
-    assertThrows[NullPointerException] { cmd.mapOptionValues[Int]("x") }
-    assertThrows[NullPointerException] { cmd.mapOptionValues[Long]("x") }
-    assertThrows[NullPointerException] { cmd.mapOptionValues[File]("x") }
-    assertThrows[NullPointerException] { cmd.mapOptionValues[User]("x") }
+    assert { cmd.mapOptionValues[Int]("x").isEmpty }
+    assert { cmd.mapOptionValues[Long]("x").isEmpty }
+    assert { cmd.mapOptionValues[File]("x").isEmpty }
+    assert { cmd.mapOptionValues[User]("x").isEmpty }
 
     assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValue[Int]) }
     assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValue[Long]) }
     assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValue[File]) }
     assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValue[User]) }
 
-    assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValues[Int]) }
-    assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValues[Long]) }
-    assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValues[File]) }
-    assertThrows[NullPointerException] { cmd.getOptions.foreach(_.mapValues[User]) }
+    assert { cmd.getOptions.forall(_.mapValues[Int].isEmpty) }
+    assert { cmd.getOptions.forall(_.mapValues[Long].isEmpty) }
+    assert { cmd.getOptions.forall(_.mapValues[File].isEmpty) }
+    assert { cmd.getOptions.forall(_.mapValues[User].isEmpty) }
 
-    assert { cmd.mapArgs[Int].toSeq == Nil }
-    assert { cmd.mapArgs[Long].toSeq == Nil }
-    assert { cmd.mapArgs[File].toSeq == Nil }
-    assert { cmd.mapArgs[User].toSeq == Nil }
+    assert { cmd.mapArgs[Int] == Nil }
+    assert { cmd.mapArgs[Long] == Nil }
+    assert { cmd.mapArgs[File] == Nil }
+    assert { cmd.mapArgs[User] == Nil }
   }
 
   private def split(cmdline: String): Array[String] = cmdline.split(" ")
@@ -112,7 +112,7 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
   private def assertMapValues[T](cmd: CommandLine, opt: String, values: T*)(implicit mapper: ValueMapper[T], tag: ClassTag[T]): Unit = {
     assert { cmd.hasOption(opt) }
     assert { cmd.mapOptionValue[T](opt) == values.head }
-    assert { cmd.mapOptionValues[T](opt).toSeq == values }
+    assert { cmd.mapOptionValues[T](opt) == values }
 
     assert {
       cmd.getOptions
@@ -125,13 +125,13 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
       cmd.getOptions
         .find { _.getOpt == opt }
         .get
-        .mapValues[T].toSeq == values
+        .mapValues[T] == values
     }
 
     values.zipWithIndex.foreach {
       case (value, index) => assert { cmd.mapArg[T](index) == value }
     }
 
-    assert { cmd.mapArgs[T].toSeq == values }
+    assert { cmd.mapArgs[T] == values }
   }
 }

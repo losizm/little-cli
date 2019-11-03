@@ -19,8 +19,6 @@ import java.io.File
 
 import org.apache.commons.cli._
 
-import scala.reflect.ClassTag
-
 /** Provides extension methods to [[https://commons.apache.org/proper/commons-cli/index.html Apache Commons CLI]]. */
 object Implicits {
   /** Converts `Option` to `Optionable`. */
@@ -140,17 +138,14 @@ object Implicits {
       }
 
     /**
-     * Maps option values to Array[T].
+     * Maps option values to Seq[T].
      *
      * @param mapper value mapper
-     * @param tag class tag
-     *
-     * @throws NullPointerException if option value is null
      */
-    def mapValues[T](implicit mapper: ValueMapper[T], tag: ClassTag[T]): Array[T] =
+    def mapValues[T](implicit mapper: ValueMapper[T]): Seq[T] =
       option.getValues match {
-        case null   => throw new NullPointerException(s"option value is null: ${option.getOpt}")
-        case values => values.map(mapper.map)
+        case null   => Nil
+        case values => values.toSeq.map(mapper.map)
       }
   }
 
@@ -221,13 +216,12 @@ object Implicits {
       mapper.map { getArg(index) }
 
     /**
-     * Maps arguments to Array[T].
+     * Maps arguments to Seq[T].
      *
      * @param mapper value mapper
-     * @param tag class tag
      */
-    def mapArgs[T](implicit mapper: ValueMapper[T], tag: ClassTag[T]): Array[T] =
-      command.getArgs.map(mapper.map)
+    def mapArgs[T](implicit mapper: ValueMapper[T]): Seq[T] =
+      command.getArgs.toSeq.map(mapper.map)
 
     /**
      * Maps option value to type T.
@@ -244,18 +238,15 @@ object Implicits {
       }
 
     /**
-     * Maps option values to Array[T].
+     * Maps option values to Seq[T].
      *
      * @param opt option
      * @param mapper value mapper
-     * @param tag class tag
-     *
-     * @throws NullPointerException if option value is null
      */
-    def mapOptionValues[T](opt: String)(implicit mapper: ValueMapper[T], tag: ClassTag[T]): Array[T] =
+    def mapOptionValues[T](opt: String)(implicit mapper: ValueMapper[T]): Seq[T] =
       command.getOptionValues(opt) match {
-        case null   => throw new NullPointerException(s"option value is null: $opt")
-        case values => values.map(mapper.map)
+        case null   => Nil
+        case values => values.toSeq.map(mapper.map)
       }
   }
 }
