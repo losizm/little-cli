@@ -16,6 +16,7 @@
 package little.cli
 
 import java.io.File
+import java.nio.file.{ Path, Paths }
 
 import org.apache.commons.cli._
 
@@ -40,6 +41,11 @@ object Implicits {
   /** Maps value to `File`. */
   implicit object FileValueMapper extends ValueMapper[File] {
     def map(value: String): File = new File(value)
+  }
+
+  /** Maps value to `Path`. */
+  implicit object PathValueMapper extends ValueMapper[Path] {
+    def map(value: String): Path = Paths.get(value)
   }
 
   /** Adds extension methods to `org.apache.commons.cli.Option`. */

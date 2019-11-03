@@ -20,7 +20,7 @@ package little.cli
  *
  * === How It Works ===
  *
- * Mappers can be used for option values and argument values.
+ * Mappers can be used for option values and arguments.
  *
  * {{{
  * import little.cli.Cli.{ application, option }

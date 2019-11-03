@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2019 Carlos Conyers
  *
@@ -17,6 +16,8 @@
 package little.cli
 
 import java.io.File
+import java.nio.file.{ Path, Paths }
+
 import org.apache.commons.cli.CommandLine
 
 import Cli._
@@ -30,7 +31,7 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
       case Array(id, name) => User(id.toInt, name)
     }
 
-  it should "map option and argument values" in {
+  it should "map option values and arguments" in {
     val root = User(0, "root")
     val guest = User(1, "guest")
 
@@ -50,11 +51,13 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
     assertMapValues(app.parse(split("-N 1 2 1 2")), "N", 1L, 2L)
     assertMapValues(app.parse(split("-f a a"))    , "f", file("a"))
     assertMapValues(app.parse(split("-F a b a b")), "F", file("a"), file("b"))
+    assertMapValues(app.parse(split("-f a a"))    , "f", path("a"))
+    assertMapValues(app.parse(split("-F a b a b")), "F", path("a"), path("b"))
     assertMapValues(app.parse(split("-u 0:root 0:root")), "u", root)
     assertMapValues(app.parse(split("-U 0:root 1:guest 0:root 1:guest")), "U", root, guest)
   }
 
-  it should "map empty option and argument values" in {
+  it should "map empty option values and arguments" in {
     val app = application("test [ options... ] args...")
       .options(
         option("n", "Number option" ).args(1),
@@ -71,6 +74,7 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
     assertThrows[NoSuchElementException] { cmd.mapOptionValue[Int]("n") }
     assertThrows[NoSuchElementException] { cmd.mapOptionValue[Long]("n") }
     assertThrows[NoSuchElementException] { cmd.mapOptionValue[File]("f") }
+    assertThrows[NoSuchElementException] { cmd.mapOptionValue[Path]("f") }
     assertThrows[NoSuchElementException] { cmd.mapOptionValue[User]("u") }
 
     assert { cmd.mapOptionValue("n", 10) == 10 }
@@ -81,42 +85,51 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
     assert { cmd.mapOptionValues[Int]("n").isEmpty }
     assert { cmd.mapOptionValues[Long]("n").isEmpty }
     assert { cmd.mapOptionValues[File]("f").isEmpty }
+    assert { cmd.mapOptionValues[Path]("f").isEmpty }
     assert { cmd.mapOptionValues[User]("U").isEmpty }
 
     assertThrows[NoSuchElementException] { cmd.mapOptionValue[Int]("x") }
     assertThrows[NoSuchElementException] { cmd.mapOptionValue[Long]("x") }
     assertThrows[NoSuchElementException] { cmd.mapOptionValue[File]("x") }
+    assertThrows[NoSuchElementException] { cmd.mapOptionValue[Path]("x") }
     assertThrows[NoSuchElementException] { cmd.mapOptionValue[User]("x") }
 
     assert { cmd.mapOptionValues[Int]("x").isEmpty }
     assert { cmd.mapOptionValues[Long]("x").isEmpty }
     assert { cmd.mapOptionValues[File]("x").isEmpty }
+    assert { cmd.mapOptionValues[Path]("x").isEmpty }
     assert { cmd.mapOptionValues[User]("x").isEmpty }
 
     assertThrows[NoSuchElementException] { cmd.getOptions.foreach(_.mapValue[Int]) }
     assertThrows[NoSuchElementException] { cmd.getOptions.foreach(_.mapValue[Long]) }
     assertThrows[NoSuchElementException] { cmd.getOptions.foreach(_.mapValue[File]) }
+    assertThrows[NoSuchElementException] { cmd.getOptions.foreach(_.mapValue[Path]) }
     assertThrows[NoSuchElementException] { cmd.getOptions.foreach(_.mapValue[User]) }
 
     assert { cmd.getOptions.forall(_.mapValues[Int].isEmpty) }
     assert { cmd.getOptions.forall(_.mapValues[Long].isEmpty) }
     assert { cmd.getOptions.forall(_.mapValues[File].isEmpty) }
+    assert { cmd.getOptions.forall(_.mapValues[Path].isEmpty) }
     assert { cmd.getOptions.forall(_.mapValues[User].isEmpty) }
 
     assert { cmd.mapArg[Int](0, 10) == 10 }
     assert { cmd.mapArg[Long](0, 10L) == 10L }
     assert { cmd.mapArg[File](0, file(".")) == file(".") }
+    assert { cmd.mapArg[Path](0, path(".")) == path(".") }
     assert { cmd.mapArg[User](0, User(1, "nobody")) == User(1, "nobody") }
 
     assert { cmd.mapArgs[Int] == Nil }
     assert { cmd.mapArgs[Long] == Nil }
     assert { cmd.mapArgs[File] == Nil }
+    assert { cmd.mapArgs[Path] == Nil }
     assert { cmd.mapArgs[User] == Nil }
   }
 
   private def split(cmdline: String): Array[String] = cmdline.split(" ")
 
   private def file(name: String) = new File(name)
+
+  private def path(name: String) = Paths.get(name)
 
   private def assertMapValues[T](cmd: CommandLine, opt: String, values: T*)(implicit mapper: ValueMapper[T]): Unit = {
     assert { cmd.hasOption(opt) }

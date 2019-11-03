@@ -8,7 +8,7 @@ The Scala library that provides extension methods to [Apache Commons CLI](https:
 To use **little-cli**, start by adding it to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-cli" % "0.4.0"
+libraryDependencies += "com.github.losizm" %% "little-cli" % "0.5.0"
 ```
 
 There's a runtime dependency to [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/index.html),
@@ -56,12 +56,12 @@ cmd.hasOption("help") match {
 }
 ```
 
-### Mapping Option and Argument Values
+### Mapping Option Values and Arguments
 
-Option and argument values can be mapped to types other than `String` by
+Option values and arguments can be mapped to types other than `String` by
 adding a `ValueMapper[T]` to implicit scope. There are default implementations
-for `Int`, `Long`, and `File` defined in `Implicits`. Feel free to define your
-own for other types.
+for `Int`, `Long`, `File`, and `Path` defined in `Implicits`. Feel free to
+define your own for other types.
 
 ```scala
 import little.cli.Cli.{ application, option }
