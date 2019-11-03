@@ -197,14 +197,14 @@ object Implicits {
   /** Adds extension methods to `org.apache.commons.cli.CommandLine`. */
   implicit class CommandLineType(private val command: CommandLine) extends AnyVal {
     /** Gets argument count. */
-    def getArgCount(): Int = command.getArgs.size
+    def getArgCount(): Int = command.getArgList.size
 
     /**
      * Gets argument at specified index.
      *
      * @param index argument index
      */
-    def getArg(index: Int): String = command.getArgs().apply(index)
+    def getArg(index: Int): String = command.getArgList.get(index)
 
     /**
      * Maps argument at specified index to type T.
@@ -214,6 +214,20 @@ object Implicits {
      */
     def mapArg[T](index: Int)(implicit mapper: ValueMapper[T]): T =
       mapper.map { getArg(index) }
+
+    /**
+     * Maps argument at specified index to type T or gets default if argument
+     * not present.
+     *
+     * @param index argument index
+     * @param default default value
+     * @param mapper value mapper
+     */
+    def mapArg[T](index: Int, default: => T)(implicit mapper: ValueMapper[T]): T =
+      (index >= 0 && index < getArgCount) match {
+        case true  => mapper.map { getArg(index) }
+        case false => default
+      }
 
     /**
      * Maps arguments to Seq[T].
@@ -234,6 +248,19 @@ object Implicits {
     def mapOptionValue[T](opt: String)(implicit mapper: ValueMapper[T]): T =
       command.getOptionValue(opt) match {
         case null  => throw new NullPointerException(s"option value is null: $opt")
+        case value => mapper.map(value)
+      }
+
+    /**
+     * Maps option value to type T or gets default if option value not present.
+     *
+     * @param opt option
+     * @param default default value
+     * @param mapper value mapper
+     */
+    def mapOptionValue[T](opt: String, default: => T)(implicit mapper: ValueMapper[T]): T =
+      command.getOptionValue(opt) match {
+        case null  => default
         case value => mapper.map(value)
       }
 

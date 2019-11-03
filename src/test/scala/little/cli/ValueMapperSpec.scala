@@ -18,7 +18,6 @@ package little.cli
 
 import java.io.File
 import org.apache.commons.cli.CommandLine
-import scala.reflect.ClassTag
 
 import Cli._
 import Implicits._
@@ -74,6 +73,11 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
     assertThrows[NullPointerException] { cmd.mapOptionValue[File]("f") }
     assertThrows[NullPointerException] { cmd.mapOptionValue[User]("u") }
 
+    assert { cmd.mapOptionValue("n", 10) == 10 }
+    assert { cmd.mapOptionValue("n", 10L) == 10L }
+    assert { cmd.mapOptionValue("f", file(".")) == file(".") }
+    assert { cmd.mapOptionValue("u", User(1, "nobody")) == User(1, "nobody") }
+
     assert { cmd.mapOptionValues[Int]("n").isEmpty }
     assert { cmd.mapOptionValues[Long]("n").isEmpty }
     assert { cmd.mapOptionValues[File]("f").isEmpty }
@@ -99,6 +103,11 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
     assert { cmd.getOptions.forall(_.mapValues[File].isEmpty) }
     assert { cmd.getOptions.forall(_.mapValues[User].isEmpty) }
 
+    assert { cmd.mapArg[Int](0, 10) == 10 }
+    assert { cmd.mapArg[Long](0, 10L) == 10L }
+    assert { cmd.mapArg[File](0, file(".")) == file(".") }
+    assert { cmd.mapArg[User](0, User(1, "nobody")) == User(1, "nobody") }
+
     assert { cmd.mapArgs[Int] == Nil }
     assert { cmd.mapArgs[Long] == Nil }
     assert { cmd.mapArgs[File] == Nil }
@@ -109,7 +118,7 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
 
   private def file(name: String) = new File(name)
 
-  private def assertMapValues[T](cmd: CommandLine, opt: String, values: T*)(implicit mapper: ValueMapper[T], tag: ClassTag[T]): Unit = {
+  private def assertMapValues[T](cmd: CommandLine, opt: String, values: T*)(implicit mapper: ValueMapper[T]): Unit = {
     assert { cmd.hasOption(opt) }
     assert { cmd.mapOptionValue[T](opt) == values.head }
     assert { cmd.mapOptionValues[T](opt) == values }
