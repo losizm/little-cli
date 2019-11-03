@@ -16,11 +16,11 @@
 package little.cli
 
 /**
- * Provides utility for mapping String values.
+ * Provides utility for mapping option values and arguments.
  *
  * === How It Works ===
  *
- * Mappers can be used for option values and arguments.
+ * Add mappers to implicit scope to enable maps to specific value types.
  *
  * {{{
  * import little.cli.Cli.{ application, option }
@@ -47,10 +47,10 @@ package little.cli
  * // Map keep-alive option
  * val keepAlive = cmd.mapOptionValue[KeepAlive]("keep-alive")
  *
- * // Map directory option -- see FileValueMapper in Implicits
+ * // Map directory option via FileValueMapper in Implicits
  * val directory = cmd.mapOptionValue[java.io.File]("directory")
  *
- * // Map port argument -- see IntValueMapper in Implicits
+ * // Map port argument via IntValueMapper in Implicits
  * val port = cmd.mapArg[Int](0)
  * }}}
  *

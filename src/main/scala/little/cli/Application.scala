@@ -22,7 +22,7 @@ import org.apache.commons.cli._
 import scala.util.Try
 
 /**
- * Bundles up components for providing command line interface.
+ * Encapsulates components for providing command line interface.
  *
  * @see [[Cli Cli.application(usage)]], [[Cli Cli.application(usage, options)]]
  */

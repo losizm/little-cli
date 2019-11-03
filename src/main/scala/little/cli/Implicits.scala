@@ -167,7 +167,7 @@ object Implicits {
     /**
      * Sets whether group is required and returns modified group.
      *
-     * @param value specifies whether group is required
+     * @param mandatory specifies whether group is required
      */
     def required(mandatory: Boolean = true): OptionGroup = {
       group.setRequired(mandatory)
