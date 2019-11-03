@@ -88,6 +88,19 @@ class CliSpec extends org.scalatest.FlatSpec {
     assert { !cmd.hasOption("stdin") }
     assert { !cmd.hasOption("file") }
 
+    assert { cmd.hasOption("i", "recursive") == (true, true) }
+    assert { cmd.hasOption("recursive", "f") == (true, false) }
+    assert { cmd.hasOption("i", "recursive", "f") == (true, true, false) }
+    assert { cmd.hasOption("i", "f", "recursive") == (true, false, true) }
+
+    assert { cmd.hasOptions() == Nil }
+    assert { cmd.hasOptions("i") == Seq(true) }
+    assert { cmd.hasOptions("f") == Seq(false) }
+    assert { cmd.hasOptions("i", "recursive") == Seq(true, true) }
+    assert { cmd.hasOptions("recursive", "f") == Seq(true, false) }
+    assert { cmd.hasOptions("i", "recursive", "f") == Seq(true, true, false) }
+    assert { cmd.hasOptions("i", "recursive", "f", "exclude") == Seq(true, true, false, true) }
+
     assert { cmd.getArgCount == 2 }
     assert { cmd.getArg(0) == "exception" }
     assert { cmd.getArg(1) == "src/main/scala" }

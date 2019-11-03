@@ -281,5 +281,35 @@ object Implicits {
         case null   => Nil
         case values => values.toSeq.map(mapper.map)
       }
+
+    /**
+     * Creates tuple corresponding to supplied options indicating whether each
+     * option is set or not.
+     *
+     * @param opt1 first option
+     * @param opt2 second option
+     */
+    def hasOption(opt1: String, opt2: String): (Boolean, Boolean) =
+      (command.hasOption(opt1), command.hasOption(opt2))
+
+    /**
+     * Creates tuple corresponding to supplied options indicating whether each
+     * option is set or not.
+     *
+     * @param opt1 first option
+     * @param opt2 second option
+     * @param opt3 third option
+     */
+    def hasOption(opt1: String, opt2: String, opt3: String): (Boolean, Boolean, Boolean) =
+      (command.hasOption(opt1), command.hasOption(opt2), command.hasOption(opt3))
+
+    /**
+     * Creates sequence corresponding to supplied options indicating whether
+     * each option is set or not.
+     *
+     * @param opts options
+     */
+    def hasOptions(opts: String*): Seq[Boolean] =
+      opts.map(command.hasOption)
   }
 }
