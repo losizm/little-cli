@@ -53,17 +53,20 @@ class CliSpec extends org.scalatest.FlatSpec {
     app.options(
       option("i", "ignore-case", false, "Perform case insensitive matching"),
       option("l", "files-with-matches", false, "Print file name only"),
-      option("m", "max-count", true, "Stop reading file after 'num' matches").argName("num"),
-      option("n", "line-number", false, "Include line number of match"),
     )
+
+    app.addOption(option("m", "max-count", true, "Stop reading file after 'num' matches").argName("num"))
+
+    app.addOption("n", "line-number", false, "Include line number of match")
 
     app.addOptions(
       option("r", "recursive", false, "Recursively search subdirectories"),
-      group(
-        option("0", "stdin", false, "Read from standard in"),
-        option("f", "file", true, "Read from specified file").argName("name")
-      ),
-      option("" , "exclude", true, "Exclude filename pattern from search").argName("pattern"),
+      option("" , "exclude", true, "Exclude filename pattern from search").argName("pattern")
+    )
+
+    app.addOptionGroup(
+      option("0", "stdin", false, "Read from standard in"),
+      option("f", "file", true, "Read from specified file").argName("name")
     )
 
     assert { app.usage == "grep [ options... ] <pattern> [ <fileName>... ]" }

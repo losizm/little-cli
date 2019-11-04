@@ -61,6 +61,54 @@ sealed trait Application {
    */
   def addOptions(opts: Optionable*): this.type
 
+  /**
+   * Add option to existing application options.
+   *
+   * @param opt option
+   */
+  def addOption(opt: Option): this.type
+
+  /**
+   * Add option to existing application options.
+   *
+   * @param opt short option
+   * @param description option description
+   */
+  def addOption(opt: String, description: String): this.type
+
+  /**
+   * Add option to existing application options.
+   *
+   * @param opt short option
+   * @param hasArg specifies whether option takes an argument
+   * @param description option description
+   */
+  def addOption(opt: String, hasArg: Boolean, description: String): this.type
+
+  /**
+   * Add option to existing application options.
+   *
+   * @param opt short option
+   * @param longOpt long option
+   * @param hasArg specifies whether option takes an argument
+   * @param description option description
+   */
+  def addOption(opt: String, longOpt: String, hasArg: Boolean, description: String): this.type
+
+  /**
+   * Add option group to existing application options.
+   *
+   * @param group option group
+   */
+  def addOptionGroup(group: OptionGroup): this.type
+
+  /**
+   * Add option group to existing application options.
+   *
+   * @param opts options
+   */
+  def addOptionGroup(opts: Option*): this.type
+
   /** Gets header displayed at beginning of help. */
   def header(): String
 
@@ -192,6 +240,38 @@ private class ApplicationImpl extends Application {
 
   def addOptions(opts: Optionable*): this.type = {
     mergeOptions(_options, opts)
+    this
+  }
+
+  def addOption(opt: Option): this.type = {
+    _options.addOption(opt)
+    this
+  }
+
+  def addOption(opt: String, description: String): this.type = {
+    _options.addOption(opt, description)
+    this
+  }
+
+  def addOption(opt: String, hasArg: Boolean, description: String): this.type = {
+    _options.addOption(opt, hasArg, description)
+    this
+  }
+
+  def addOption(opt: String, longOpt: String, hasArg: Boolean, description: String): this.type = {
+    _options.addOption(opt, longOpt, hasArg, description)
+    this
+  }
+
+  def addOptionGroup(group: OptionGroup): this.type = {
+    _options.addOptionGroup(group)
+    this
+  }
+
+  def addOptionGroup(opts: Option*): this.type = {
+    _options.addOptionGroup(
+      opts.foldLeft(new OptionGroup()) { _ addOption _ }
+    )
     this
   }
 
