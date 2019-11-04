@@ -42,6 +42,9 @@ sealed trait Application {
   /** Sets application options. */
   def options(opts: Optionable*): this.type
 
+  /** Adds options to existing application options. */
+  def addOptions(opts: Optionable*): this.type
+
   /** Gets header displayed at beginning of help. */
   def header(): String
 
@@ -150,8 +153,13 @@ private class ApplicationImpl extends Application {
   def options(opts: Optionable*): this.type = {
     _options = opts match {
       case null => new Options()
-      case _    => Cli.options(opts : _*)
+      case _    => mergeOptions(new Options(), opts)
     }
+    this
+  }
+
+  def addOptions(opts: Optionable*): this.type = {
+    mergeOptions(_options, opts)
     this
   }
 

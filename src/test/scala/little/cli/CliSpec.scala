@@ -55,6 +55,9 @@ class CliSpec extends org.scalatest.FlatSpec {
       option("l", "files-with-matches", false, "Print file name only"),
       option("m", "max-count", true, "Stop reading file after 'num' matches").argName("num"),
       option("n", "line-number", false, "Include line number of match"),
+    )
+
+    app.addOptions(
       option("r", "recursive", false, "Recursively search subdirectories"),
       group(
         option("0", "stdin", false, "Read from standard in"),

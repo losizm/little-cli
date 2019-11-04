@@ -196,8 +196,7 @@ object Implicits {
      *
      * @param opts more options
      */
-    def addOptions(opts: Optionable*): Options =
-      opts.foldLeft(options) { (os, opt) => opt.fold(os.addOptionGroup, os.addOption) }
+    def addOptions(opts: Optionable*): Options = mergeOptions(options, opts)
   }
 
   /** Adds extension methods to `org.apache.commons.cli.CommandLine`. */

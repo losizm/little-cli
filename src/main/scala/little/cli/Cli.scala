@@ -44,9 +44,7 @@ object Cli {
    * @param opts options
    */
   def options(opts: Optionable*): Options =
-    opts.foldLeft(new Options()) { (opts, opt) =>
-      opt.fold(opts.addOptionGroup, opts.addOption)
-    }
+    mergeOptions(new Options(), opts)
 
   /**
    * Creates new option with supplied short option and description.

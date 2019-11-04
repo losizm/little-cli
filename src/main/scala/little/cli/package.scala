@@ -70,4 +70,9 @@ package object cli {
 
   /** Alias to `java.util.NoSuchElementException`. */
   type NoSuchElementException = java.util.NoSuchElementException
+
+  private[cli] def mergeOptions(options: Options, opts: Seq[Optionable]): Options =
+    opts.foldLeft(options) { (_, opt) =>
+      opt.fold(options.addOptionGroup, options.addOption)
+    }
 }
