@@ -30,43 +30,75 @@ sealed trait Application {
   /** Gets usage syntax. */
   def usage(): String
 
-  /** Sets usage syntax. */
+  /**
+   * Sets usage syntax.
+   *
+   * @param syntax usage syntax
+   */
   def usage(syntax: String): this.type
 
   /** Gets application options. */
   def options(): Options
 
-  /** Sets application options. */
+  /**
+   * Sets application options.
+   *
+   * @param opts options
+   */
   def options(opts: Options): this.type
 
-  /** Sets application options. */
+  /**
+   * Sets application options.
+   *
+   * @param opts options
+   */
   def options(opts: Optionable*): this.type
 
-  /** Adds options to existing application options. */
+  /**
+   * Adds options to existing application options.
+   *
+   * @param opts options
+   */
   def addOptions(opts: Optionable*): this.type
 
   /** Gets header displayed at beginning of help. */
   def header(): String
 
-  /** Sets header displayed at beginning of help. */
+  /**
+   * Sets header displayed at beginning of help.
+   *
+   * @param text header text
+   */
   def header(text: String): this.type
 
   /** Gets footer displayed at end of help. */
   def footer(): String
 
-  /** Sets footer displayed at end of help. */
+  /**
+   * Sets footer displayed at end of help.
+   *
+   * @param text footer text
+   */
   def footer(text: String): this.type
 
   /** Gets formatter used for printing help. */
   def formatter(): HelpFormatter
 
-  /** Sets formatter used for printing help. */
+  /**
+   * Sets formatter used for printing help.
+   *
+   * @param fmt help formatter
+   */
   def formatter(fmt: HelpFormatter): this.type
 
   /** Gets maximum number of characters printed per line in help. */
   def width(): Int
 
-  /** Sets maximum number of characters printed per line in help. */
+  /**
+   * Sets maximum number of characters printed per line in help.
+   *
+   * @param max number of characters per line
+   */
   def width(max: Int): this.type
 
   /** Prints help to `Sytem.out`. */
