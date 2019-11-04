@@ -95,6 +95,44 @@ val directory = cmd.mapOptionValue[java.io.File]("directory")
 val port = cmd.mapArg[Int](0)
 ```
 
+### Checking Multiple Options
+
+At times, you may need to check multiple options, possibly from a group of
+mutually exclusive options, to determine what action to take. For those
+occasions, you have the overloaded `hasOption` extension method to
+`CommandLine`.
+
+```scala
+import java.io.{ ByteArrayInputStream, FileInputStream }
+import little.cli.Cli.{ application, group, option }
+import little.cli.Implicits._
+
+val app = application("post-request [ options ... ] url")
+  .options(
+    option("H", true, "Add header").argName("header"),
+    // Define group of mutually exclusive options
+    group(
+      option("d", true, "Use supplied inline data").argName("data"),
+      option("f", true, "Use data from supplied file").argName("file"),
+      option("s", false, "Use data from stdin (default)")
+    )
+  )
+
+val cmd = app.parse("-f ./message.json http://localhost:8080/messages".split("\\s+"))
+
+// Check option group and assign input stream
+val in = cmd.hasOption("d", "f", "s") match {
+  case (true, _, _) => new ByteArrayInputStream(cmd.getOptionValue("d").getBytes)
+  case (_, true, _) => new FileInputStream(cmd.getOptionValue("f"))
+  case (_, _, any ) => System.in
+}
+
+val url = cmd.getArg(0)
+```
+
+If you need to check more than 3 options, use `hasOptions` whose behavior is
+similiar, except it returns `Seq[Boolean]` instead of a tuple.
+
 ## API Documentation
 
 See [scaladoc](https://losizm.github.io/little-cli/latest/api/little/cli/index.html)
