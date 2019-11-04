@@ -35,15 +35,14 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
     val root = User(0, "root")
     val guest = User(1, "guest")
 
-    val app = application("test [ options... ] args...")
-      .options(
-        option("n", "Number option" ).args(1),
-        option("N", "Number options").args(2),
-        option("f", "File option"   ).args(1),
-        option("F", "Files option"  ).args(2),
-        option("u", "User option"   ).args(1),
-        option("U", "User options"  ).args(2)
-      )
+    val app = application("test [ options... ] args...",
+      option("n", "Number option" ).args(1),
+      option("N", "Number options").args(2),
+      option("f", "File option"   ).args(1),
+      option("F", "Files option"  ).args(2),
+      option("u", "User option"   ).args(1),
+      option("U", "User options"  ).args(2)
+    )
 
     assertMapValues(app.parse(split("-n 1 1"))    , "n", 1)
     assertMapValues(app.parse(split("-N 1 2 1 2")), "N", 1, 2)
@@ -58,16 +57,15 @@ class ValueMapperSpec extends org.scalatest.FlatSpec {
   }
 
   it should "map empty option values and arguments" in {
-    val app = application("test [ options... ] args...")
-      .options(
-        option("n", "Number option" ).args(1),
-        option("N", "Number options").args(2),
-        option("f", "File option"   ).args(1),
-        option("F", "Files option"  ).args(2),
-        option("u", "User option"   ).args(1),
-        option("U", "User options"  ).args(2),
-        option("x", "Test opiton"   ).args(0)
-      )
+    val app = application("test [ options... ] args...",
+      option("n", "Number option" ).args(1),
+      option("N", "Number options").args(2),
+      option("f", "File option"   ).args(1),
+      option("F", "Files option"  ).args(2),
+      option("u", "User option"   ).args(1),
+      option("U", "User options"  ).args(2),
+      option("x", "Test opiton"   ).args(0)
+    )
 
     val cmd = app.parse(Array("-x"))
 

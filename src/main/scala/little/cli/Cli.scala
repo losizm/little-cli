@@ -39,6 +39,15 @@ object Cli {
     new ApplicationImpl().usage(usage).options(options)
 
   /**
+   * Creates Application with supplied usage and options.
+   *
+   * @param usage usage syntax
+   * @param options application options
+   */
+  def application(usage: String, options: Optionable*): Application =
+    new ApplicationImpl().usage(usage).addOptions(options : _*)
+
+  /**
    * Creates new options with supplied options.
    *
    * @param opts options
