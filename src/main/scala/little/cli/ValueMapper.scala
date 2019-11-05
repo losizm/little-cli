@@ -35,12 +35,10 @@ package little.cli
  *     case Array(timeout, max) => KeepAlive(timeout.toInt, max.toInt)
  *   }
  *
- * val app = application("start-server [ options ... ] port")
- *   .options(
- *     option("d", "directory", true, "Location of public files directory"),
- *     option("k", "keep-alive", true, "Allow persistent connections")
- *       .argName("timeout:max")
- *   )
+ * val app = application("start-server [ options ... ] port",
+ *   option("d", "directory", true, "Location of public files directory"),
+ *   option("k", "keep-alive", true, "Allow persistent connections").argName("timeout:max")
+ * )
  *
  * val cmd = app.parse("-d ./public_html --keep-alive 5:10 8080".split("\\s+"))
  *

@@ -29,11 +29,8 @@ import org.apache.commons.cli._
  * import little.cli.Cli.{ application, option }
  * import little.cli.Implicits._
  *
- * // Create application with specified usage
- * val app = application("grep [ options ... ] <pattern> [ <fileName> ... ]")
- *
- * // Add options to application
- * app.options(
+ * // Create application with supplied usage and options
+ * val app = application("grep [ options ... ] <pattern> [ <fileName> ... ]",
  *   option("i", "ignore-case", false, "Perform case insensitive matching"),
  *   option("l", "files-with-matches", false, "Print file name only"),
  *   option("m", "max-count", true, "Stop reading file after 'num' matches").argName("num"),
@@ -49,12 +46,11 @@ import org.apache.commons.cli._
  * val cmd = app.parse(args)
  *
  * cmd.hasOption("help") match {
- *   case true  => app.printHelp() // Print help if requested
+ *   case true  => app.printHelp() // Print help to System.out
  *   case false =>
- *     // Interpret command and pretend to do something
+ *     // Get command arguments and pretend to do something
  *     val pattern  = cmd.getArg(0)
  *     val fileName = cmd.getArg(1)
- *
  *     println(s"Searching for files with '\$pattern' in \$fileName directory...")
  * }
  * }}}

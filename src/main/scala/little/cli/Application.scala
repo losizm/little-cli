@@ -62,14 +62,14 @@ sealed trait Application {
   def addOptions(opts: Optionable*): this.type
 
   /**
-   * Add option to existing application options.
+   * Adds option to existing application options.
    *
    * @param opt option
    */
   def addOption(opt: Option): this.type
 
   /**
-   * Add option to existing application options.
+   * Adds option to existing application options.
    *
    * @param opt short option
    * @param description option description
@@ -77,7 +77,7 @@ sealed trait Application {
   def addOption(opt: String, description: String): this.type
 
   /**
-   * Add option to existing application options.
+   * Adds option to existing application options.
    *
    * @param opt short option
    * @param hasArg specifies whether option takes an argument
@@ -86,7 +86,7 @@ sealed trait Application {
   def addOption(opt: String, hasArg: Boolean, description: String): this.type
 
   /**
-   * Add option to existing application options.
+   * Adds option to existing application options.
    *
    * @param opt short option
    * @param longOpt long option
@@ -96,14 +96,14 @@ sealed trait Application {
   def addOption(opt: String, longOpt: String, hasArg: Boolean, description: String): this.type
 
   /**
-   * Add option group to existing application options.
+   * Adds option group to existing application options.
    *
    * @param group option group
    */
   def addOptionGroup(group: OptionGroup): this.type
 
   /**
-   * Add option group to existing application options.
+   * Adds option group to existing application options.
    *
    * @param opts options
    */
