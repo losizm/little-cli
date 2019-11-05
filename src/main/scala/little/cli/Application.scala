@@ -15,7 +15,7 @@
  */
 package little.cli
 
-import java.io.{ PrintWriter, OutputStream }
+import java.io.{ OutputStream, PrintWriter, StringWriter }
 
 import org.apache.commons.cli._
 
@@ -148,6 +148,9 @@ sealed trait Application {
    * @param max number of characters per line
    */
   def width(max: Int): this.type
+
+  /** Gets help. */
+  def help(): String
 
   /** Prints help to `Sytem.out`. */
   def printHelp(): Unit
@@ -296,6 +299,12 @@ private class ApplicationImpl extends Application {
   def width(num: Int): this.type = {
     _formatter.setWidth(num.max(40))
     this
+  }
+
+  def help(): String = {
+    val out = new StringWriter()
+    printHelp(new PrintWriter(out, true))
+    out.toString
   }
 
   def printHelp(): Unit = printHelp(System.out)
