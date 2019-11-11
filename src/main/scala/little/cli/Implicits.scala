@@ -212,6 +212,19 @@ object Implicits {
     def getArg(index: Int): String = command.getArgList.get(index)
 
     /**
+     * Gets argument at specified index or returns default if argument not
+     * present.
+     *
+     * @param index argument index
+     * @param default default value
+     */
+    def getArg(index: Int, default: => String): String =
+      (index >= 0 && index < getArgCount) match {
+        case true  => getArg(index)
+        case false => default
+      }
+
+    /**
      * Maps argument at specified index to type T.
      *
      * @param index argument index
@@ -221,7 +234,7 @@ object Implicits {
       mapper.map { getArg(index) }
 
     /**
-     * Maps argument at specified index to type T or gets default if argument
+     * Maps argument at specified index to type T or returns default if argument
      * not present.
      *
      * @param index argument index
@@ -257,7 +270,8 @@ object Implicits {
       }
 
     /**
-     * Maps option value to type T or gets default if option value not present.
+     * Maps option value to type T or returns default if option value not
+     * present.
      *
      * @param opt option
      * @param default default value

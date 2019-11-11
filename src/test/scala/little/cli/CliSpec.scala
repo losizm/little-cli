@@ -110,6 +110,11 @@ class CliSpec extends org.scalatest.FlatSpec {
     assert { cmd.getArgCount == 2 }
     assert { cmd.getArg(0) == "exception" }
     assert { cmd.getArg(1) == "src/main/scala" }
+
+    assert { cmd.getArg(0, "default") == "exception" }
+    assert { cmd.getArg(1, "default") == "src/main/scala" }
+    assert { cmd.getArg(2, "default") == "default" }
+    assert { cmd.getArg(-1, "default") == "default" }
   }
 
   private def testOption(
