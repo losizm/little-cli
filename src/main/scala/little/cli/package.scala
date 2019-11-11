@@ -39,14 +39,15 @@ import org.apache.commons.cli._
  *   option("x", "exclude", true, "Exclude filename pattern from search").argName("pattern"),
  * )
  *
- * // Create some arguments to play with
  * val args = Array("-ilr", "--exclude", "*.swp", "exception", "src/main/scala")
  *
  * // Parse arguments
  * val cmd = app.parse(args)
  *
  * cmd.hasOption("help") match {
- *   case true  => app.printHelp() // Print help to System.out
+ *   case true  =>
+ *     // Print help to System.out
+ *     app.printHelp()
  *   case false =>
  *     // Get command arguments and pretend to do something
  *     val pattern  = cmd.getArg(0)

@@ -8,7 +8,7 @@ The Scala library that provides extension methods to [Apache Commons CLI](https:
 To use **little-cli**, start by adding it to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-cli" % "0.6.0"
+libraryDependencies += "com.github.losizm" %% "little-cli" % "0.7.0"
 ```
 
 There's a runtime dependency to [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/index.html),
@@ -36,14 +36,15 @@ val app = application("grep [ options ... ] <pattern> [ <fileName> ... ]",
   option("x", "exclude", true, "Exclude filename pattern from search").argName("pattern"),
 )
 
-// Create some arguments to play with
 val args = Array("-ilr", "--exclude", "*.swp", "exception", "src/main/scala")
 
 // Parse arguments
 val cmd = app.parse(args)
 
 cmd.hasOption("help") match {
-  case true  => app.printHelp() // Print help to System.out
+  case true =>
+    // Print help to System.out
+    app.printHelp()
   case false =>
     // Get command arguments and pretend to do something
     val pattern  = cmd.getArg(0)
@@ -54,12 +55,13 @@ cmd.hasOption("help") match {
 
 ### Mapping Option Values and Arguments
 
-Option values and arguments can be mapped to types other than `String` by
-adding a `ValueMapper[T]` to implicit scope. There are default implementations
-for `Int`, `Long`, `File`, and `Path` defined in `Implicits`. Feel free to
-define your own for other types.
+Option values and arguments can be mapped to types other than `String` by adding
+an implicit `ValueMapper[T]` to scope. There are default implementations for
+`Int`, `Long`, `File`, and `Path` defined in `Implicits`. Feel free to define
+your own for other types.
 
 ```scala
+import java.io.File
 import little.cli.Cli.{ application, option }
 import little.cli.Implicits._
 import little.cli.ValueMapper
@@ -83,7 +85,7 @@ val cmd = app.parse("-d ./public_html --keep-alive 5:10 8080".split("\\s+"))
 val keepAlive = cmd.mapOptionValue[KeepAlive]("keep-alive")
 
 // Map directory option
-val directory = cmd.mapOptionValue[java.io.File]("directory")
+val directory = cmd.mapOptionValue[File]("directory")
 
 // Map port argument
 val port = cmd.mapArg[Int](0)

@@ -20,7 +20,7 @@ package little.cli
  *
  * === How It Works ===
  *
- * Add mappers to implicit scope to enable maps to specific value types.
+ * Add implicit mappers to scope to enable maps to specific value types.
  *
  * {{{
  * import little.cli.Cli.{ application, option }
