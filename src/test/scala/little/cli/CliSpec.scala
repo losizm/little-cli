@@ -20,7 +20,7 @@ import org.apache.commons.cli.{ Option => CliOption }
 import Cli._
 import Implicits._
 
-class CliSpec extends org.scalatest.FlatSpec {
+class CliSpec extends org.scalatest.flatspec.AnyFlatSpec {
   it should "create Options" in {
     val opts = options(
       option("i", "ignore-case", false, "Perform case insensitive matching"),

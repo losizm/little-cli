@@ -22,7 +22,7 @@ unmanagedSourceDirectories in Compile += {
 
 libraryDependencies ++= Seq(
   "commons-cli"   %  "commons-cli" % "1.4"   % "provided",
-  "org.scalatest" %% "scalatest"   % "3.0.8" % "test"
+  "org.scalatest" %% "scalatest"   % "3.2.2" % "test"
 )
 
 developers := List(
@@ -47,7 +47,9 @@ pomIncludeRepository := { _ => false }
 
 publishTo := {
   val nexus = "https://oss.sonatype.org"
-  if (isSnapshot.value) Some("snaphsots" at s"$nexus/content/repositories/snapshots")
-  else Some("releases" at s"$nexus/service/local/staging/deploy/maven2")
+  isSnapshot.value match {
+    case true  => Some("snaphsots" at s"$nexus/content/repositories/snapshots")
+    case false => Some("releases" at s"$nexus/service/local/staging/deploy/maven2")
+  }
 }
 

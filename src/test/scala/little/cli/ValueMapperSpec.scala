@@ -23,7 +23,7 @@ import org.apache.commons.cli.CommandLine
 import Cli._
 import Implicits._
 
-class ValueMapperSpec extends org.scalatest.FlatSpec {
+class ValueMapperSpec extends org.scalatest.flatspec.AnyFlatSpec {
   private case class User(id: Int, name: String)
 
   private implicit val userValueMapper: ValueMapper[User] =
