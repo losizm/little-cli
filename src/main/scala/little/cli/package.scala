@@ -36,7 +36,7 @@ import org.apache.commons.cli._
  *   option("m", "max-count", true, "Stop reading file after 'num' matches").argName("num"),
  *   option("n", "line-number", false, "Include line number of match"),
  *   option("r", "recursive", false, "Recursively search subdirectories"),
- *   option("x", "exclude", true, "Exclude filename pattern from search").argName("pattern"),
+ *   option("x", "exclude", true, "Exclude filename pattern from search").argName("pattern")
  * )
  *
  * val args = Array("-ilr", "--exclude", "*.swp", "exception", "src/main/scala")

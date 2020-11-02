@@ -2,13 +2,13 @@
 
 The Scala library that provides extension methods to [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/index.html).
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.losizm/little-cli_2.12.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.losizm%22%20AND%20a:%22little-cli_2.12%22)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.losizm/little-cli_2.13.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.losizm%22%20AND%20a:%22little-cli_2.13%22)
 
 ## Getting Started
 To use **little-cli**, start by adding it to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-cli" % "0.7.0"
+libraryDependencies += "com.github.losizm" %% "little-cli" % "0.8.0"
 ```
 
 There's a runtime dependency to [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/index.html),
@@ -33,7 +33,7 @@ val app = application("grep [ options ... ] <pattern> [ <fileName> ... ]",
   option("m", "max-count", true, "Stop reading file after 'num' matches").argName("num"),
   option("n", "line-number", false, "Include line number of match"),
   option("r", "recursive", false, "Recursively search subdirectories"),
-  option("x", "exclude", true, "Exclude filename pattern from search").argName("pattern"),
+  option("x", "exclude", true, "Exclude filename pattern from search").argName("pattern")
 )
 
 val args = Array("-ilr", "--exclude", "*.swp", "exception", "src/main/scala")
