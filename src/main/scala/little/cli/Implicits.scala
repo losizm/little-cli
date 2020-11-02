@@ -219,7 +219,7 @@ object Implicits {
      * @param default default value
      */
     def getArg(index: Int, default: => String): String =
-      (index >= 0 && index < getArgCount) match {
+      (index >= 0 && index < getArgCount()) match {
         case true  => getArg(index)
         case false => default
       }
@@ -242,7 +242,7 @@ object Implicits {
      * @param mapper value mapper
      */
     def mapArg[T](index: Int, default: => T)(implicit mapper: ValueMapper[T]): T =
-      (index >= 0 && index < getArgCount) match {
+      (index >= 0 && index < getArgCount()) match {
         case true  => mapper.map { getArg(index) }
         case false => default
       }

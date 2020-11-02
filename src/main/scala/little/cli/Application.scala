@@ -28,7 +28,7 @@ import scala.util.Try
  */
 sealed trait Application {
   /** Gets usage syntax. */
-  def usage(): String
+  def usage: String
 
   /**
    * Sets usage syntax.
@@ -38,7 +38,7 @@ sealed trait Application {
   def usage(syntax: String): this.type
 
   /** Gets application options. */
-  def options(): Options
+  def options: Options
 
   /**
    * Sets application options.
@@ -110,7 +110,7 @@ sealed trait Application {
   def addOptionGroup(opts: Option*): this.type
 
   /** Gets header displayed at beginning of help. */
-  def header(): String
+  def header: String
 
   /**
    * Sets header displayed at beginning of help.
@@ -120,7 +120,7 @@ sealed trait Application {
   def header(text: String): this.type
 
   /** Gets footer displayed at end of help. */
-  def footer(): String
+  def footer: String
 
   /**
    * Sets footer displayed at end of help.
@@ -130,7 +130,7 @@ sealed trait Application {
   def footer(text: String): this.type
 
   /** Gets formatter used for printing help. */
-  def formatter(): HelpFormatter
+  def formatter: HelpFormatter
 
   /**
    * Sets formatter used for printing help.
@@ -140,7 +140,7 @@ sealed trait Application {
   def formatter(fmt: HelpFormatter): this.type
 
   /** Gets maximum number of characters printed per line in help. */
-  def width(): Int
+  def width: Int
 
   /**
    * Sets maximum number of characters printed per line in help.
@@ -150,7 +150,7 @@ sealed trait Application {
   def width(max: Int): this.type
 
   /** Gets help. */
-  def help(): String
+  def help: String
 
   /** Prints help to `Sytem.out`. */
   def printHelp(): Unit
@@ -301,7 +301,7 @@ private class ApplicationImpl extends Application {
     this
   }
 
-  def help(): String = {
+  def help: String = {
     val out = new StringWriter()
     printHelp(new PrintWriter(out, true))
     out.toString

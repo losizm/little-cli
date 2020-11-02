@@ -107,7 +107,7 @@ class CliSpec extends org.scalatest.FlatSpec {
     assert { cmd.hasOptions("i", "recursive", "f") == Seq(true, true, false) }
     assert { cmd.hasOptions("i", "recursive", "f", "exclude") == Seq(true, true, false, true) }
 
-    assert { cmd.getArgCount == 2 }
+    assert { cmd.getArgCount() == 2 }
     assert { cmd.getArg(0) == "exception" }
     assert { cmd.getArg(1) == "src/main/scala" }
 
