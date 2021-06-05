@@ -134,5 +134,5 @@ See [scaladoc](https://losizm.github.io/little-cli/latest/api/little/cli/index.h
 for additional details.
 
 ## License
-**little-cli** is licensed under the Apache License, Version 2. See LICENSE file
+**little-cli** is licensed under the Apache License, Version 2. See [LICENSE](LICENSE)
 for more information.
