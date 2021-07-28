@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,17 @@
  */
 package little
 
-import org.apache.commons.cli._
-
 /**
  * The Scala library that provides extension methods to
  * [[https://commons.apache.org/proper/commons-cli/index.html Apache Commons CLI]].
  *
- * === How It Works ===
+ * ### How It Works
  *
  * Here's an example showing the library in action.
  *
  * {{{
  * import little.cli.Cli.{ application, option }
- * import little.cli.Implicits._
+ * import little.cli.Implicits.{ *, given }
  *
  * // Create application with supplied usage and options
  * val app = application("grep [ options ... ] <pattern> [ <fileName> ... ]",
@@ -44,7 +42,7 @@ import org.apache.commons.cli._
  * // Parse arguments
  * val cmd = app.parse(args)
  *
- * cmd.hasOption("help") match {
+ * cmd.hasOption("help") match
  *   case true  =>
  *     // Print help to System.out
  *     app.printHelp()
@@ -53,23 +51,18 @@ import org.apache.commons.cli._
  *     val pattern  = cmd.getArg(0)
  *     val fileName = cmd.getArg(1)
  *     println(s"Searching for files with '\$pattern' in \$fileName directory...")
- * }
  * }}}
  */
-package object cli {
-  /**
-   * Either `OptionGroup` or `Option` can added to `Options`.
-   *
-   * @see [[Implicits.optionToOptionable optionToOptionable]],
-   *  [[Implicits.optionGroupToOptionable optionGroupToOptionable]]
-   */
-  type Optionable = Either[OptionGroup, Option]
+package cli
 
-  /** Alias to `java.util.NoSuchElementException`. */
-  type NoSuchElementException = java.util.NoSuchElementException
+import org.apache.commons.cli.*
 
-  private[cli] def mergeOptions(options: Options, opts: Seq[Optionable]): Options =
-    opts.foldLeft(options) { (_, opt) =>
-      opt.fold(options.addOptionGroup, options.addOption)
-    }
-}
+/** `Option` and `OptionGroup` can added to `Options`. */
+type Optionable = Option | OptionGroup
+
+private[cli] def mergeOptions(options: Options, opts: Seq[Optionable]): Options =
+  opts.foldLeft(options) { (_, opt) =>
+    opt match
+      case opt: Option      => options.addOption(opt)
+      case opt: OptionGroup => options.addOptionGroup(opt)
+  }

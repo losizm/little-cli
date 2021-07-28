@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,22 +18,21 @@ package little.cli
 /**
  * Provides utility for mapping option values and arguments.
  *
- * === How It Works ===
+ * ### How It Works
  *
- * Add implicit mappers to scope to enable maps to specific value types.
+ * Add given mappers to enable maps to specific value types.
  *
  * {{{
  * import little.cli.Cli.{ application, option }
- * import little.cli.Implicits._
+ * import little.cli.Implicits.{ *, given }
  * import little.cli.ValueMapper
  *
  * case class KeepAlive(idleTimeout: Int, maxRequests: Int)
  *
  * // Define how to map value to KeepAlive
- * implicit val keepAliveMapper: ValueMapper[KeepAlive] =
- *   _.split(":") match {
+ * given ValueMapper[KeepAlive] =
+ *   _.split(":") match
  *     case Array(timeout, max) => KeepAlive(timeout.toInt, max.toInt)
- *   }
  *
  * val app = application("start-server [ options ... ] port",
  *   option("d", "directory", true, "Location of public files directory"),
@@ -56,11 +55,10 @@ package little.cli
  *  [[Implicits.CommandLineType CommanLineType.mapOptionValue()]],
  *  [[Implicits.CommandLineType CommanLineType.mapArg()]]
  */
-trait ValueMapper[T] {
+trait ValueMapper[T]:
   /**
    * Maps value to type T.
    *
    * @param value input value
    */
   def map(value: String): T
-}

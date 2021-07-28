@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,17 @@ import java.nio.file.{ Path, Paths }
 
 import org.apache.commons.cli.CommandLine
 
-import Cli._
-import Implicits._
+import scala.language.implicitConversions
 
-class ValueMapperSpec extends org.scalatest.flatspec.AnyFlatSpec {
+import Cli.*
+import Implicits.{ *, given }
+
+class ValueMapperSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private case class User(id: Int, name: String)
 
-  private implicit val userValueMapper: ValueMapper[User] =
-    _.split(":") match {
+  private given ValueMapper[User] =
+    _.split(":") match
       case Array(id, name) => User(id.toInt, name)
-    }
 
   it should "map option values and arguments" in {
     val root = User(0, "root")
@@ -125,11 +126,11 @@ class ValueMapperSpec extends org.scalatest.flatspec.AnyFlatSpec {
 
   private def split(cmdline: String): Array[String] = cmdline.split(" ")
 
-  private def file(name: String) = new File(name)
+  private def file(name: String) = File(name)
 
   private def path(name: String) = Paths.get(name)
 
-  private def assertMapValues[T](cmd: CommandLine, opt: String, values: T*)(implicit mapper: ValueMapper[T]): Unit = {
+  private def assertMapValues[T](cmd: CommandLine, opt: String, values: T*)(implicit mapper: ValueMapper[T]): Unit =
     assert { cmd.hasOption(opt) }
     assert { cmd.mapOptionValue[T](opt) == values.head }
     assert { cmd.mapOptionValues[T](opt) == values }
@@ -153,5 +154,3 @@ class ValueMapperSpec extends org.scalatest.flatspec.AnyFlatSpec {
     }
 
     assert { cmd.mapArgs[T] == values }
-  }
-}

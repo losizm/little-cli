@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,117 +18,99 @@ package little.cli
 import java.io.File
 import java.nio.file.{ Path, Paths }
 
-import org.apache.commons.cli._
+import org.apache.commons.cli.*
 
 /** Provides extension methods to [[https://commons.apache.org/proper/commons-cli/index.html Apache Commons CLI]]. */
-object Implicits {
-  /** Converts `Option` to `Optionable`. */
-  implicit val optionToOptionable: Option => Optionable = Right.apply
-
-  /** Converts `OptionGroup` to `Optionable`. */
-  implicit val optionGroupToOptionable: OptionGroup => Optionable = Left.apply
-
+object Implicits:
   /** Maps value to `Int`. */
-  implicit object IntValueMapper extends ValueMapper[Int] {
+  given intValueMapper: ValueMapper[Int] with
     def map(value: String): Int = value.toInt
-  }
 
   /** Maps value to `Long`. */
-  implicit object LongValueMapper extends ValueMapper[Long] {
+  given longValueMapper: ValueMapper[Long] with
     def map(value: String): Long = value.toLong
-  }
 
   /** Maps value to `File`. */
-  implicit object FileValueMapper extends ValueMapper[File] {
-    def map(value: String): File = new File(value)
-  }
+  given fileValueMapper: ValueMapper[File] with
+    def map(value: String): File = File(value)
 
   /** Maps value to `Path`. */
-  implicit object PathValueMapper extends ValueMapper[Path] {
+  given pathValueMapper: ValueMapper[Path] with
     def map(value: String): Path = Paths.get(value)
-  }
 
   /** Adds extension methods to `org.apache.commons.cli.Option`. */
-  implicit class OptionType(private val option: Option) extends AnyVal {
+  implicit class OptionType(option: Option) extends AnyVal:
     /**
      * Sets number of arguments and returns modified option.
      *
      * @param count number of arguments
      */
-    def args(count: Int): Option = {
+    def args(count: Int): Option =
       option.setArgs(count)
       option
-    }
 
     /**
      * Sets argument name and returns modified option.
      *
      * @param name argument name
      */
-    def argName(name: String): Option = {
+    def argName(name: String): Option =
       option.setArgName(name)
       option
-    }
 
     /**
      * Sets description and returns modified option.
      *
      * @param desc description
      */
-    def description(desc: String): Option = {
+    def description(desc: String): Option =
       option.setDescription(desc)
       option
-    }
 
     /**
      * Sets long name of option and returns modified option.
      *
      * @param name long name of option
      */
-    def longOpt(name: String): Option = {
+    def longOpt(name: String): Option =
       option.setLongOpt(name)
       option
-    }
 
     /**
      * Sets whether option has an optional argument and returns modified option.
      *
      * @param optional specifies whether argument is optional
      */
-    def optionalArg(optional: Boolean): Option = {
+    def optionalArg(optional: Boolean): Option =
       option.setOptionalArg(optional)
       option
-    }
 
     /**
      * Sets whether option is required and returns modified option.
      *
      * @param mandatory specifies whether option is required
      */
-    def required(mandatory: Boolean = true): Option = {
+    def required(mandatory: Boolean = true): Option =
       option.setRequired(mandatory)
       option
-    }
 
     /**
      * Sets option type and returns modified option.
      *
      * @param optType option type
      */
-    def optionType(optType: Class[_]): Option = {
+    def optionType(optType: Class[_]): Option =
       option.setType(optType)
       option
-    }
 
     /**
      * Sets value separator and returns modified option.
      *
      * @param sep value separator
      */
-    def valueSeparator(sep: Char): Option = {
+    def valueSeparator(sep: Char): Option =
       option.setValueSeparator(sep)
       option
-    }
 
     /**
      * Maps option value to type T.
@@ -138,10 +120,9 @@ object Implicits {
      * @throws NoSuchElementException if option value not present
      */
     def mapValue[T](implicit mapper: ValueMapper[T]): T =
-      option.getValue match {
+      option.getValue match
         case null  => throw new NoSuchElementException(s"option value not present: ${option.getOpt}")
         case value => mapper.map(value)
-      }
 
     /**
      * Maps option values to Seq[T].
@@ -149,14 +130,12 @@ object Implicits {
      * @param mapper value mapper
      */
     def mapValues[T](implicit mapper: ValueMapper[T]): Seq[T] =
-      option.getValues match {
+      option.getValues match
         case null   => Nil
         case values => values.toSeq.map(mapper.map)
-      }
-  }
 
   /** Adds extension methods to `org.apache.commons.cli.OptionGroup`. */
-  implicit class OptionGroupType(private val group: OptionGroup) extends AnyVal {
+  implicit class OptionGroupType(group: OptionGroup) extends AnyVal:
     /**
      * Adds option to group and returns modified group.
      *
@@ -169,14 +148,12 @@ object Implicits {
      *
      * @param mandatory specifies whether group is required
      */
-    def required(mandatory: Boolean = true): OptionGroup = {
+    def required(mandatory: Boolean = true): OptionGroup =
       group.setRequired(mandatory)
       group
-    }
-  }
 
   /** Adds extension methods to `org.apache.commons.cli.Options`. */
-  implicit class OptionsType(private val options: Options) extends AnyVal {
+  implicit class OptionsType(options: Options) extends AnyVal:
     /**
      * Adds option and returns modified options.
      *
@@ -197,10 +174,9 @@ object Implicits {
      * @param opts more options
      */
     def addOptions(opts: Optionable*): Options = mergeOptions(options, opts)
-  }
 
   /** Adds extension methods to `org.apache.commons.cli.CommandLine`. */
-  implicit class CommandLineType(private val command: CommandLine) extends AnyVal {
+  implicit class CommandLineType(command: CommandLine) extends AnyVal:
     /** Gets argument count. */
     def getArgCount(): Int = command.getArgList.size
 
@@ -219,10 +195,9 @@ object Implicits {
      * @param default default value
      */
     def getArg(index: Int, default: => String): String =
-      (index >= 0 && index < getArgCount()) match {
+      (index >= 0 && index < getArgCount()) match
         case true  => getArg(index)
         case false => default
-      }
 
     /**
      * Maps argument at specified index to type T.
@@ -242,10 +217,9 @@ object Implicits {
      * @param mapper value mapper
      */
     def mapArg[T](index: Int, default: => T)(implicit mapper: ValueMapper[T]): T =
-      (index >= 0 && index < getArgCount()) match {
+      (index >= 0 && index < getArgCount()) match
         case true  => mapper.map { getArg(index) }
         case false => default
-      }
 
     /**
      * Maps arguments to Seq[T].
@@ -264,10 +238,9 @@ object Implicits {
      * @throws NoSuchElementException if option value not present
      */
     def mapOptionValue[T](opt: String)(implicit mapper: ValueMapper[T]): T =
-      command.getOptionValue(opt) match {
+      command.getOptionValue(opt) match
         case null  => throw new NoSuchElementException(s"option value not present: $opt")
         case value => mapper.map(value)
-      }
 
     /**
      * Maps option value to type T or returns default if option value not
@@ -278,10 +251,9 @@ object Implicits {
      * @param mapper value mapper
      */
     def mapOptionValue[T](opt: String, default: => T)(implicit mapper: ValueMapper[T]): T =
-      command.getOptionValue(opt) match {
+      command.getOptionValue(opt) match
         case null  => default
         case value => mapper.map(value)
-      }
 
     /**
      * Maps option values to Seq[T].
@@ -290,31 +262,9 @@ object Implicits {
      * @param mapper value mapper
      */
     def mapOptionValues[T](opt: String)(implicit mapper: ValueMapper[T]): Seq[T] =
-      command.getOptionValues(opt) match {
+      command.getOptionValues(opt) match
         case null   => Nil
         case values => values.toSeq.map(mapper.map)
-      }
-
-    /**
-     * Creates tuple corresponding to supplied options indicating whether each
-     * option is set or not.
-     *
-     * @param opt1 first option
-     * @param opt2 second option
-     */
-    def hasOption(opt1: String, opt2: String): (Boolean, Boolean) =
-      (command.hasOption(opt1), command.hasOption(opt2))
-
-    /**
-     * Creates tuple corresponding to supplied options indicating whether each
-     * option is set or not.
-     *
-     * @param opt1 first option
-     * @param opt2 second option
-     * @param opt3 third option
-     */
-    def hasOption(opt1: String, opt2: String, opt3: String): (Boolean, Boolean, Boolean) =
-      (command.hasOption(opt1), command.hasOption(opt2), command.hasOption(opt3))
 
     /**
      * Creates sequence corresponding to supplied options indicating whether
@@ -322,7 +272,15 @@ object Implicits {
      *
      * @param opts options
      */
-    def hasOptions(opts: String*): Seq[Boolean] =
-      opts.map(command.hasOption)
-  }
-}
+    def hasOptions(opts: Seq[String]): Tuple =
+      Tuple.fromArray(opts.map(command.hasOption).toArray)
+
+    /**
+     * Creates sequence corresponding to supplied options indicating whether
+     * each option is set or not.
+     *
+     * @param one option
+     * @param more additional options
+     */
+    def hasOptions(one: String, more: String*): Tuple =
+      hasOptions(one +: more)

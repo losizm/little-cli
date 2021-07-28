@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,19 @@
  */
 package little.cli
 
-import org.apache.commons.cli._
+import org.apache.commons.cli.*
 
 import scala.util.Try
 
 /** Provides factory methods and other utilities. */
-object Cli {
+object Cli:
   /**
    * Creates Application with supplied usage.
    *
    * @param usage usage syntax
    */
   def application(usage: String): Application =
-    new ApplicationImpl().usage(usage)
+    ApplicationImpl().usage(usage)
 
   /**
    * Creates Application with supplied usage and options.
@@ -36,7 +36,7 @@ object Cli {
    * @param options application options
    */
   def application(usage: String, options: Options): Application =
-    new ApplicationImpl().usage(usage).options(options)
+    ApplicationImpl().usage(usage).options(options)
 
   /**
    * Creates Application with supplied usage and options.
@@ -45,7 +45,7 @@ object Cli {
    * @param options application options
    */
   def application(usage: String, options: Optionable*): Application =
-    new ApplicationImpl().usage(usage).addOptions(options : _*)
+    ApplicationImpl().usage(usage).addOptions(options : _*)
 
   /**
    * Creates new options with supplied options.
@@ -53,7 +53,7 @@ object Cli {
    * @param opts options
    */
   def options(opts: Optionable*): Options =
-    mergeOptions(new Options(), opts)
+    mergeOptions(Options(), opts)
 
   /**
    * Creates new option with supplied short option and description.
@@ -62,7 +62,7 @@ object Cli {
    * @param description option description
    */
   def option(opt: String, description: String): Option =
-    new Option(opt, description)
+    Option(opt, description)
 
   /**
    * Creates new option with supplied attributes.
@@ -72,7 +72,7 @@ object Cli {
    * @param description option description
    */
   def option(opt: String, hasArg: Boolean, description: String): Option =
-    new Option(opt, hasArg, description)
+    Option(opt, hasArg, description)
 
   /**
    * Creates new option with supplied attributes.
@@ -83,7 +83,7 @@ object Cli {
    * @param description option description
    */
   def option(opt: String, longOpt: String, hasArg: Boolean, description: String): Option =
-    new Option(opt, longOpt, hasArg, description)
+    Option(opt, longOpt, hasArg, description)
 
   /**
    * Creates new options group with supplied options.
@@ -91,7 +91,7 @@ object Cli {
    * @param opts options
    */
   def group(opts: Option*): OptionGroup =
-    opts.foldLeft(new OptionGroup()) { _ addOption _ }
+    opts.foldLeft(OptionGroup())(_ addOption _)
 
   /**
    * Parses arguments according to specified options.
@@ -100,7 +100,7 @@ object Cli {
    * @param args arguments
    */
   def parse(opts: Options, args: Array[String]): CommandLine =
-    new DefaultParser().parse(opts, args)
+    DefaultParser().parse(opts, args)
 
   /**
    * Parses arguments according to specified options.
@@ -111,7 +111,7 @@ object Cli {
    *   instead of throwing `ParseException`
    */
   def parse(opts: Options, args: Array[String], stoppable: Boolean): CommandLine =
-    new DefaultParser().parse(opts, args, stoppable)
+    DefaultParser().parse(opts, args, stoppable)
 
   /**
    * Tries to parse arguments according to specified options.
@@ -120,7 +120,7 @@ object Cli {
    * @param args arguments
    */
   def tryParse(opts: Options, args: Array[String]): Try[CommandLine] =
-    Try { parse(opts, args) }
+    Try(parse(opts, args))
 
   /**
    * Tries to parse arguments according to specified options.
@@ -131,7 +131,7 @@ object Cli {
    *   instead of failing with `ParseException`
    */
   def tryParse(opts: Options, args: Array[String], stoppable: Boolean): Try[CommandLine] =
-    Try { parse(opts, args, stoppable) }
+    Try(parse(opts, args, stoppable))
 
   /**
    * Prints help to `Sytem.out` for `options` with specified `usage` syntax.
@@ -174,4 +174,3 @@ object Cli {
    */
   def printHelp(width: Int, usage: String, header: String, options: Options, footer: String): Unit =
     application(usage, options).width(width).header(header).footer(footer).printHelp()
-}

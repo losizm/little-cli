@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package little.cli
 
 import java.io.{ OutputStream, PrintWriter, StringWriter }
 
-import org.apache.commons.cli._
+import org.apache.commons.cli.*
 
 import scala.util.Try
 
@@ -26,7 +26,7 @@ import scala.util.Try
  *
  * @see [[Cli Cli.application(usage)]], [[Cli Cli.application(usage, options)]]
  */
-sealed trait Application {
+sealed trait Application:
   /** Gets usage syntax. */
   def usage: String
 
@@ -200,16 +200,15 @@ sealed trait Application {
    *   instead of failing with `ParseException`
    */
   def tryParse(args: Array[String], stoppable: Boolean): Try[CommandLine]
-}
 
-private class ApplicationImpl extends Application {
+private class ApplicationImpl extends Application:
   private var _usage: String = ""
-  private var _options: Options = new Options()
+  private var _options: Options = Options()
   private var _header: String = ""
   private var _footer: String = ""
-  private var _formatter: HelpFormatter = new HelpFormatter()
+  private var _formatter: HelpFormatter = HelpFormatter()
 
-  private lazy val parser = new DefaultParser()
+  private lazy val parser = DefaultParser()
 
   def usage: String = _usage
   def options: Options = _options
@@ -218,106 +217,87 @@ private class ApplicationImpl extends Application {
   def formatter: HelpFormatter = _formatter
   def width: Int = _formatter.getWidth
 
-  def usage(syntax: String): this.type = {
-    if (syntax == null || syntax.isEmpty)
-      throw new IllegalArgumentException("Invalid usage: null or empty")
+  def usage(syntax: String): this.type =
+    if syntax == null || syntax.isEmpty then
+      throw IllegalArgumentException("Invalid usage: null or empty")
     _usage = syntax
     this
-  }
 
-  def options(opts: Options): this.type = {
-    _options = opts match {
-      case null => new Options()
+  def options(opts: Options): this.type =
+    _options = opts match
+      case null => Options()
       case _    => opts
-    }
     this
-  }
 
-  def options(opts: Optionable*): this.type = {
-    _options = opts match {
-      case null => new Options()
-      case _    => mergeOptions(new Options(), opts)
-    }
+  def options(opts: Optionable*): this.type =
+    _options = opts match
+      case null => Options()
+      case _    => mergeOptions(Options(), opts)
     this
-  }
 
-  def addOptions(opts: Optionable*): this.type = {
+  def addOptions(opts: Optionable*): this.type =
     mergeOptions(_options, opts)
     this
-  }
 
-  def addOption(opt: Option): this.type = {
+  def addOption(opt: Option): this.type =
     _options.addOption(opt)
     this
-  }
 
-  def addOption(opt: String, description: String): this.type = {
+  def addOption(opt: String, description: String): this.type =
     _options.addOption(opt, description)
     this
-  }
 
-  def addOption(opt: String, hasArg: Boolean, description: String): this.type = {
+  def addOption(opt: String, hasArg: Boolean, description: String): this.type =
     _options.addOption(opt, hasArg, description)
     this
-  }
 
-  def addOption(opt: String, longOpt: String, hasArg: Boolean, description: String): this.type = {
+  def addOption(opt: String, longOpt: String, hasArg: Boolean, description: String): this.type =
     _options.addOption(opt, longOpt, hasArg, description)
     this
-  }
 
-  def addOptionGroup(group: OptionGroup): this.type = {
+  def addOptionGroup(group: OptionGroup): this.type =
     _options.addOptionGroup(group)
     this
-  }
 
-  def addOptionGroup(opts: Option*): this.type = {
+  def addOptionGroup(opts: Option*): this.type =
     _options.addOptionGroup(
-      opts.foldLeft(new OptionGroup()) { _ addOption _ }
+      opts.foldLeft(OptionGroup())(_ addOption _)
     )
     this
-  }
 
-  def header(text: String): this.type = {
+  def header(text: String): this.type =
     _header = text
     this
-  }
 
-  def footer(text: String): this.type = {
+  def footer(text: String): this.type =
     _footer = text
     this
-  }
 
-  def formatter(fmt: HelpFormatter): this.type = {
-    _formatter = fmt match {
-      case null => new HelpFormatter()
+  def formatter(fmt: HelpFormatter): this.type =
+    _formatter = fmt match
+      case null => HelpFormatter()
       case _    => fmt
-    }
     this
-  }
 
-  def width(num: Int): this.type = {
+  def width(num: Int): this.type =
     _formatter.setWidth(num.max(40))
     this
-  }
 
-  def help: String = {
-    val out = new StringWriter()
-    printHelp(new PrintWriter(out, true))
+  def help: String =
+    val out = StringWriter()
+    printHelp(PrintWriter(out, true))
     out.toString
-  }
 
   def printHelp(): Unit = printHelp(System.out)
 
-  def printHelp(out: OutputStream): Unit = printHelp(new PrintWriter(out, true))
+  def printHelp(out: OutputStream): Unit = printHelp(PrintWriter(out, true))
 
-  def printHelp(out: PrintWriter): Unit = {
+  def printHelp(out: PrintWriter): Unit =
     formatter.printUsage(out, formatter.getWidth, usage)
-    if (header != null) formatter.printWrapped(out, formatter.getWidth, header)
+    if header != null then formatter.printWrapped(out, formatter.getWidth, header)
     formatter.printOptions(out, formatter.getWidth, options, formatter.getLeftPadding, formatter.getDescPadding)
-    if (footer != null) formatter.printWrapped(out, formatter.getWidth, footer)
+    if footer != null then formatter.printWrapped(out, formatter.getWidth, footer)
     out.flush()
-  }
 
   def parse(args: Array[String]): CommandLine =
     parser.parse(options, args)
@@ -326,8 +306,7 @@ private class ApplicationImpl extends Application {
     parser.parse(options, args, stoppable)
 
   def tryParse(args: Array[String]): Try[CommandLine] =
-    Try { parse(args) }
+    Try(parse(args))
 
   def tryParse(args: Array[String], stoppable: Boolean): Try[CommandLine] =
-    Try { parse(args, stoppable) }
-}
+    Try(parse(args, stoppable))

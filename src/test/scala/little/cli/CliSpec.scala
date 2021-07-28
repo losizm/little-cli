@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Carlos Conyers
+ * Copyright 2021 Carlos Conyers
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,14 @@
  */
 package little.cli
 
-import org.apache.commons.cli.{ Option => CliOption }
+import org.apache.commons.cli.Option as CliOption
 
-import Cli._
-import Implicits._
+import scala.language.implicitConversions
 
-class CliSpec extends org.scalatest.flatspec.AnyFlatSpec {
+import Cli.*
+import Implicits.{ *, given }
+
+class CliSpec extends org.scalatest.flatspec.AnyFlatSpec:
   it should "create Options" in {
     val opts = options(
       option("i", "ignore-case", false, "Perform case insensitive matching"),
@@ -94,18 +96,25 @@ class CliSpec extends org.scalatest.flatspec.AnyFlatSpec {
     assert { !cmd.hasOption("stdin") }
     assert { !cmd.hasOption("file") }
 
-    assert { cmd.hasOption("i", "recursive") == (true, true) }
-    assert { cmd.hasOption("recursive", "f") == (true, false) }
-    assert { cmd.hasOption("i", "recursive", "f") == (true, true, false) }
-    assert { cmd.hasOption("i", "f", "recursive") == (true, false, true) }
+    assert { cmd.hasOptions("i", "recursive") == (true, true) }
+    assert { cmd.hasOptions("recursive", "f") == (true, false) }
+    assert { cmd.hasOptions("i", "recursive", "f") == (true, true, false) }
+    assert { cmd.hasOptions("i", "f", "recursive") == (true, false, true) }
 
-    assert { cmd.hasOptions() == Nil }
-    assert { cmd.hasOptions("i") == Seq(true) }
-    assert { cmd.hasOptions("f") == Seq(false) }
-    assert { cmd.hasOptions("i", "recursive") == Seq(true, true) }
-    assert { cmd.hasOptions("recursive", "f") == Seq(true, false) }
-    assert { cmd.hasOptions("i", "recursive", "f") == Seq(true, true, false) }
-    assert { cmd.hasOptions("i", "recursive", "f", "exclude") == Seq(true, true, false, true) }
+    assert { cmd.hasOptions(Nil) == Tuple() }
+    assert { cmd.hasOptions(Seq("i")) == Tuple(true) }
+    assert { cmd.hasOptions(Seq("f")) == Tuple(false) }
+    assert { cmd.hasOptions(Seq("i", "recursive")) == (true, true) }
+    assert { cmd.hasOptions(Seq("recursive", "f")) == (true, false) }
+    assert { cmd.hasOptions(Seq("i", "recursive", "f")) == (true, true, false) }
+    assert { cmd.hasOptions(Seq("i", "recursive", "f", "exclude")) == (true, true, false, true) }
+
+    assert { cmd.hasOptions("i") == Tuple(true) }
+    assert { cmd.hasOptions("f") == Tuple(false) }
+    assert { cmd.hasOptions("i", "recursive") == (true, true) }
+    assert { cmd.hasOptions("recursive", "f") == (true, false) }
+    assert { cmd.hasOptions("i", "recursive", "f") == (true, true, false) }
+    assert { cmd.hasOptions("i", "recursive", "f", "exclude") == (true, true, false, true) }
 
     assert { cmd.getArgCount() == 2 }
     assert { cmd.getArg(0) == "exception" }
@@ -123,10 +132,8 @@ class CliSpec extends org.scalatest.flatspec.AnyFlatSpec {
     hasArg: Boolean,
     desc: String,
     argName: Option[String] = None
-  ): Unit = {
+  ): Unit =
     assert { opt.getLongOpt == longOpt }
     assert { opt.hasArg == hasArg }
     assert { opt.getDescription == desc }
     argName.foreach { name => opt.getArgName == name }
-  }
-}
