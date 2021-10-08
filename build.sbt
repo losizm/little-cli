@@ -1,6 +1,6 @@
 organization := "com.github.losizm"
 name := "little-cli"
-version := "1.0.0"
+version := "2.0.0-SNAPSHOT"
 
 description := "The Scala library that provides extension methods to Apache Commons CLI"
 homepage := Some(url("https://github.com/losizm/little-cli"))
