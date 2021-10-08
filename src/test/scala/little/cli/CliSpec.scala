@@ -20,7 +20,6 @@ import org.apache.commons.cli.Option as CliOption
 import scala.language.implicitConversions
 
 import Cli.*
-import Implicits.{ *, given }
 
 class CliSpec extends org.scalatest.flatspec.AnyFlatSpec:
   it should "create Options" in {

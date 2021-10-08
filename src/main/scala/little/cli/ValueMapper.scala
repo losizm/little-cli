@@ -18,14 +18,9 @@ package little.cli
 /**
  * Provides utility for mapping option values and arguments.
  *
- * ### How It Works
- *
- * Add given mappers to enable maps to specific value types.
- *
  * {{{
- * import little.cli.Cli.{ application, option }
- * import little.cli.Implicits.{ *, given }
- * import little.cli.ValueMapper
+ * import little.cli.{ *, given }
+ * import Cli.{ application, option }
  *
  * case class KeepAlive(idleTimeout: Int, maxRequests: Int)
  *
@@ -44,16 +39,12 @@ package little.cli
  * // Map keep-alive option
  * val keepAlive = cmd.mapOptionValue[KeepAlive]("keep-alive")
  *
- * // Map directory option via FileValueMapper in Implicits
+ * // Map directory option File
  * val directory = cmd.mapOptionValue[java.io.File]("directory")
  *
- * // Map port argument via IntValueMapper in Implicits
+ * // Map port argument via Int
  * val port = cmd.mapArg[Int](0)
  * }}}
- *
- * @see [[Implicits.OptionType OptionType.mapValue()]],
- *  [[Implicits.CommandLineType CommanLineType.mapOptionValue()]],
- *  [[Implicits.CommandLineType CommanLineType.mapArg()]]
  */
 trait ValueMapper[T]:
   /**

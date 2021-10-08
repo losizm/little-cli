@@ -19,7 +19,39 @@ import org.apache.commons.cli.*
 
 import scala.util.Try
 
-/** Provides factory methods and other utilities. */
+/**
+ * Provides factory methods and other utilities.
+ *
+ * {{{
+ * import little.cli.{ *, given }
+ * import Cli.{ application, option }
+ *
+ * // Create application with supplied usage and options
+ * val app = application("grep [ options ... ] <pattern> [ <fileName> ... ]",
+ *   option("i", "ignore-case", false, "Perform case insensitive matching"),
+ *   option("l", "files-with-matches", false, "Print file name only"),
+ *   option("m", "max-count", true, "Stop reading file after 'num' matches").argName("num"),
+ *   option("n", "line-number", false, "Include line number of match"),
+ *   option("r", "recursive", false, "Recursively search subdirectories"),
+ *   option("x", "exclude", true, "Exclude filename pattern from search").argName("pattern")
+ * )
+ *
+ * val args = Array("-ilr", "--exclude", "*.swp", "exception", "src/main/scala")
+ *
+ * // Parse arguments
+ * val cmd = app.parse(args)
+ *
+ * cmd.hasOption("help") match
+ *   case true  =>
+ *     // Print help to System.out
+ *     app.printHelp()
+ *   case false =>
+ *     // Get command arguments and pretend to do something
+ *     val pattern  = cmd.getArg(0)
+ *     val fileName = cmd.getArg(1)
+ *     println(s"Searching for files with '\$pattern' in \$fileName directory...")
+ * }}}
+ */
 object Cli:
   /**
    * Creates Application with supplied usage.

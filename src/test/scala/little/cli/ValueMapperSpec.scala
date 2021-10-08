@@ -23,7 +23,6 @@ import org.apache.commons.cli.CommandLine
 import scala.language.implicitConversions
 
 import Cli.*
-import Implicits.{ *, given }
 
 class ValueMapperSpec extends org.scalatest.flatspec.AnyFlatSpec:
   private case class User(id: Int, name: String)

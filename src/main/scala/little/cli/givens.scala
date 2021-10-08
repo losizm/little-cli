@@ -15,14 +15,21 @@
  */
 package little.cli
 
-import org.apache.commons.cli.*
+import java.io.File
+import java.nio.file.{ Path, Paths }
 
-/** `Option` and `OptionGroup` can added to `Options`. */
-type Optionable = Option | OptionGroup
+/** Maps value to `Int`. */
+given intValueMapper: ValueMapper[Int] with
+  def map(value: String): Int = value.toInt
 
-private[cli] def mergeOptions(options: Options, opts: Seq[Optionable]): Options =
-  opts.foldLeft(options) { (_, opt) =>
-    opt match
-      case opt: Option      => options.addOption(opt)
-      case opt: OptionGroup => options.addOptionGroup(opt)
-  }
+/** Maps value to `Long`. */
+given longValueMapper: ValueMapper[Long] with
+  def map(value: String): Long = value.toLong
+
+/** Maps value to `File`. */
+given fileValueMapper: ValueMapper[File] with
+  def map(value: String): File = File(value)
+
+/** Maps value to `Path`. */
+given pathValueMapper: ValueMapper[Path] with
+  def map(value: String): Path = Paths.get(value)

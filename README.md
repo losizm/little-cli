@@ -25,8 +25,8 @@ exclusively. See previous releases for compatibility with Scala 2.12 and Scala
 Here's an example showing the library in action.
 
 ```scala
-import little.cli.Cli.{ application, option }
-import little.cli.Implicits.{ *, given }
+import little.cli.{ *, given }
+import Cli.{ application, option }
 
 // Create application with supplied usage and options
 val app = application("grep [ options ... ] <pattern> [ <fileName> ... ]",
@@ -58,14 +58,12 @@ cmd.hasOption("help") match
 
 Option values and arguments can be mapped to types other than `String` by adding
 a given `ValueMapper[T]` to scope. There are default implementations for `Int`,
-`Long`, `File`, and `Path` defined in `Implicits`. Feel free to define
-your own for other types.
+`Long`, `File`, and `Path`. Feel free to define your own for other types.
 
 ```scala
 import java.io.File
-import little.cli.Cli.{ application, option }
-import little.cli.Implicits.{ *, given }
-import little.cli.ValueMapper
+import little.cli.{ *, given }
+import Cli.{ application, option }
 
 case class KeepAlive(idleTimeout: Int, maxRequests: Int)
 
@@ -100,8 +98,8 @@ occasions, you have the overloaded `hasOption` extension method to
 
 ```scala
 import java.io.{ ByteArrayInputStream, FileInputStream }
-import little.cli.Cli.{ application, group, option }
-import little.cli.Implicits.{ *, given }
+import little.cli.{ *, given }
+import Cli.{ application, group, option }
 
 val app = application("post-request [ options ... ] url",
   option("H", true, "Add header").argName("header"),
