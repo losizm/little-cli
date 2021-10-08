@@ -6,7 +6,7 @@ description := "The Scala library that provides extension methods to Apache Comm
 homepage := Some(url("https://github.com/losizm/little-cli"))
 licenses := List("Apache License, Version 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 
-scalaVersion := "3.0.1"
+scalaVersion := "3.0.2"
 scalacOptions ++= Seq("-deprecation", "-feature", "-new-syntax", "-Xfatal-warnings", "-Yno-experimental")
 
 Compile / doc / scalacOptions ++= Seq(
