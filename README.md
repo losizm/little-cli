@@ -8,7 +8,7 @@ The Scala library that provides extension methods to [Apache Commons CLI](https:
 To get started, add **little-cli** to your project:
 
 ```scala
-libraryDependencies += "com.github.losizm" %% "little-cli" % "1.0.0"
+libraryDependencies += "com.github.losizm" %% "little-cli" % "2.0.0"
 ```
 
 There's a runtime dependency to [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/index.html),
