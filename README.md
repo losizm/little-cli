@@ -1,8 +1,10 @@
 # little-cli
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.losizm/little-cli_3.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.losizm%22%20AND%20a:%22little-cli_3%22)
+
 The Scala library that provides extension methods to [Apache Commons CLI](https://commons.apache.org/proper/commons-cli/index.html).
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.losizm/little-cli_3.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.losizm%22%20AND%20a:%22little-cli_3%22)
+_This project is archived and read-only._
 
 ## Getting Started
 To get started, add **little-cli** to your project:
